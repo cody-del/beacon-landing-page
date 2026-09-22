@@ -1,0 +1,11 @@
+[build]
+  base = "."
+  publish = "motorized-shades/dist"
+  command = "node --test motorized-shades/consultation.test.mjs motorized-shades/consultation-http.test.mjs"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

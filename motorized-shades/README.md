@@ -2,7 +2,7 @@
 
 Standalone responsive landing page in `dist/`. Start the preview and form backend with `node server.mjs` (Node 20+).
 
-Uses Beacon Blinds' existing logo, photography, phone number, service areas, and orange accents. The inline consultation form submits through the local `/api/consultation` route to Beacon’s existing `https://beaconblinds.com/api/contact/` endpoint. It includes server validation, a honeypot, optional SMS consent, and confirmed-success handling. Hosting this page requires porting that server route or hosting the page on Beacon’s own site with its contact endpoint; static-only hosting cannot deliver submissions. The review rating and excerpt were taken from Beacon's homepage on September 21, 2026; recheck before launching advertising.
+Uses Beacon Blinds' existing logo, photography, phone number, service areas, and orange accents. The inline consultation form submits through the local `/api/consultation` route to Beacon’s existing `https://beaconblinds.com/api/contact/` endpoint. It includes server validation, a honeypot, optional SMS consent, and confirmed-success handling. Netlify hosting is configured in the repository-root `netlify.toml`; `netlify/functions/consultation.mjs` provides the same endpoint in production. Static-only hosting without that function cannot deliver submissions. The review rating and excerpt were taken from Beacon's homepage on September 21, 2026; recheck before launching advertising.
 
 Preview is marked noindex. Remove that directive only when the final page is approved for indexing. No change has been made to beaconblinds.com.
 
