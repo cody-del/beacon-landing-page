@@ -1,0 +1,19 @@
+{
+  "reference": "User-supplied Screenshot 2026-09-22 at 2.35.33 PM.png",
+  "imageSize": [1526, 1482],
+  "description": "Approximate manual trace of the dotted outline in the user's reference map, georeferenced using visible city labels.",
+  "anchors": [
+    {"name":"Marble Falls","pixel":[318,419],"coordinate":[-98.27645,30.57154],"source":"https://maps.apple.com/place?auid=16688004959670472475"},
+    {"name":"Georgetown","pixel":[1186,326],"coordinate":[-97.67806,30.63661],"source":"https://maps.apple.com/place?auid=3563600831153405583"},
+    {"name":"Austin","pixel":[1083,948],"coordinate":[-97.74750,30.26426],"source":"https://maps.apple.com/place?auid=11018610862491969006"},
+    {"name":"Buda","pixel":[948,1256],"coordinate":[-97.84312,30.08150],"source":"https://maps.apple.com/place?auid=18217975772247405617"}
+  ],
+  "outlinePixels": [
+    [7,288],[9,261],[15,242],[111,186],[206,128],[272,96],
+    [311,80],[399,69],[1124,124],[1172,138],[1233,148],
+    [1251,169],[1275,219],[1306,268],[1340,351],[1378,442],
+    [1402,508],[1438,600],[1442,639],[1438,706],
+    [1415,817],[1389,950],[1385,1027],[1360,1132],[1342,1158],
+    [1027,1266],[824,1184],[321,716],[96,501],[58,412],[20,327],[8,304]
+  ]
+}

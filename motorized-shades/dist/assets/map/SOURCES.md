@@ -6,16 +6,24 @@ The user supplied the main service communities and ZIP codes on September 22, 20
 
 Austin (whole city); Horseshoe Bay (78654, 78657); Marble Falls (78654, 78657); Kingsland (78639); Burnet (78611); Jonestown (78645); Leander (78645, 78646, 78641); Liberty Hill (78642); Cedar Park (78613); Georgetown (78626, 78628, 78633); Spicewood (78669); Lakeway (78734, 78738).
 
-## Geographic references
+## Current outline: user-supplied reference map
 
-U.S. Census Bureau TIGERweb ZIP Code Tabulation Areas, retrieved September 22, 2026:
-https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/1
+On September 22, 2026, the user supplied “Screenshot 2026-09-22 at 2.35.33 PM.png” and asked to match its outline while keeping it orange. This supersedes the original convex envelope of Census ZIP boundaries.
 
-Queried the 15 distinct supplied ZIP codes using ZCTA5. The service returned 14 polygons; 78646 has no polygon in this dataset. It is retained in the supplied list here, with Leander covered by the other supplied ZIP areas. No boundary is fabricated specifically for 78646.
+`content/service-area-outline.json` stores a manual trace in the 1526 × 1482 reference image's pixel coordinates. Four visible city labels anchor an unrotated Web Mercator fit. City-label positions are approximate, so the map retains its approximate-coverage caption. The script `scripts/build-service-boundary.py` converts the trace to longitude/latitude, checks the ring for self-intersections, and writes the GeoJSON with counterclockwise winding.
 
-Austin city, Texas, GEOID 4805000, current incorporated-place geometry retrieved September 22, 2026:
-https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4
+Geographic anchor references, retrieved September 22, 2026:
+- Marble Falls: https://maps.apple.com/place?auid=16688004959670472475
+- Georgetown: https://maps.apple.com/place?auid=3563600831153405583
+- Austin: https://maps.apple.com/place?auid=11018610862491969006
+- Buda: https://maps.apple.com/place?auid=18217975772247405617
 
-Reference queries use returnGeometry=true, outSR=4326, maxAllowableOffset=0.0008, f=geojson. Both raw responses are retained here. `scripts/build-service-boundary.py` generates a convex envelope around all reference geometry, thereby connecting the communities into one continuous outline and including intervening areas. Every source vertex is checked inside or on the envelope. No separate city/ZIP polygons appear on the customer-facing map.
+The shape follows the supplied screenshot rather than exact ZIP or city boundaries. The orange stroke, light fill, zoom controls, reset view, and community list are retained.
 
-Basemap: OpenStreetMap standard tiles, requested by the browser only near the map; no tile downloads or offline caching. Map attribution is visible. Leaflet 1.9.4 is vendored from the existing Shutter Factory project with its license. No office marker is shown because an office address was not provided for this page.
+## Earlier geographic references (retained for provenance)
+
+The stored `zip-reference.geojson` and `austin-reference.geojson` came from the U.S. Census Bureau on September 22, 2026. They supported the earlier envelope and no longer drive the current outline:
+- ZIP Code Tabulation Areas: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/PUMA_TAD_TAZ_UGA_ZCTA/MapServer/1
+- Austin city, GEOID 4805000: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/4
+
+Basemap: OpenStreetMap standard tiles with visible attribution. Leaflet 1.9.4 is vendored with its license.
