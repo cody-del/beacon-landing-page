@@ -1,4 +1,4 @@
-.reviews-section{padding:30px 28px;background:#f6f7f5;color:#555b5e;font-family:Inter,Arial,sans-serif}
+.reviews-section{padding:30px 28px;background:#f5f5f5;color:#555b5e;font-family:Inter,Arial,sans-serif}
 .reviews-layout{max-width:1840px;margin:auto;display:grid;grid-template-columns:170px 34px minmax(0,1fr) 34px;gap:16px;align-items:center}
 .reviews-summary{text-decoration:none;display:grid;justify-items:center;gap:19px;color:#555b5e}
 .reviews-stars{display:block;color:#f5b323;font-family:Arial,sans-serif;font-size:28px;line-height:1;letter-spacing:0;white-space:nowrap}
@@ -28,7 +28,7 @@
 .review-dialog::backdrop{background:#171916aa}
 .review-dialog-header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
 .review-dialog-header .reviews-source{margin:8px 0 0}
-.review-dialog-close{width:40px;height:40px;display:grid;place-items:center;font:30px/1 Arial,sans-serif;background:#f3f4f1;border:0;border-radius:50%;cursor:pointer;color:#555b5e}
+.review-dialog-close{width:40px;height:40px;display:grid;place-items:center;font:30px/1 Arial,sans-serif;background:#f3f3f3;border:0;border-radius:50%;cursor:pointer;color:#555b5e}
 .review-dialog h2{font:600 23px/1.35 Inter,Arial,sans-serif;color:#282a27;margin:23px 0 18px}
 #review-dialog-text p{font-size:16px;line-height:1.75;margin:0 0 18px;color:#555b5e;white-space:pre-line}
 .review-dialog-google{font-size:14px;color:#905211;text-underline-offset:4px;display:inline-block;margin-top:4px}

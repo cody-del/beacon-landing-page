@@ -7,7 +7,7 @@
 
 .paper-landing {
   font-family: Inter, system-ui, sans-serif;
-  background: #f7f7f4;
+  background: #f7f7f7;
 }
 .paper-landing p,
 .paper-landing h1,
@@ -203,7 +203,7 @@
   align-items: center;
   min-height: 424px;
   padding: 56px 64px;
-  background: #f7f7f4;
+  background: #f7f7f7;
   color: #262623;
 }
 .paper-reviews-inner {
@@ -261,7 +261,7 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: #f4f4ef;
+    background: #f5f5f5;
   }
   .paper-header-phone span {
     display: none;
@@ -415,7 +415,7 @@
   margin-bottom: 30px;
 }
 .hardwood-value {
-  background: #f4f4ef;
+  background: #f5f5f5;
 }
 .hardwood-value h2 {
   text-align: center;
@@ -504,7 +504,7 @@
   }
 }
 .hardwood-service-area {
-  background: #f4f4ef;
+  background: #f5f5f5;
   scroll-margin-top: 24px;
 }
 .hardwood-service-area-grid {
@@ -645,7 +645,7 @@
   padding: 14px;
   border: 1px solid #dfdfd7;
   border-radius: 10px;
-  background: #f7f7f4;
+  background: #f7f7f7;
   color: #262623;
   font: inherit;
   font-size: 16px;
