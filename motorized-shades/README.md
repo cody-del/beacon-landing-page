@@ -27,3 +27,5 @@ Six unique five-star Beacon Blinds reviews were transcribed from user-supplied s
 ## Service-area map
 
 Leaflet map with one orange approximate outline encompassing the supplied ZIP areas and Austin city. Community list, zoom controls, reset view, mobile layout, and a fallback are included. Geographic references and the reproducible boundary method are recorded in `dist/assets/map/SOURCES.md`. Run `python3 scripts/build-service-boundary.py` to rebuild and validate the envelope against the stored reference geometry.
+
+The five gallery project photographs were supplied by the user on September 22, 2026. Copies are stored as `dist/assets/beacon-gallery-*.jpg`; original files are unchanged.

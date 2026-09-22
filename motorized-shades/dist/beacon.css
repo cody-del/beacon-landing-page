@@ -14,3 +14,8 @@
 /* Match both review badges’ star-row and caption baselines. */
 .paper-ratings .review-badge strong{display:flex;align-items:center;gap:4px;min-height:23px;line-height:23px}
 .paper-ratings .badge-stars{line-height:23px}
+
+/* Five client project photos: four landscape tiles beside one portrait. */
+.product-page .beacon-project-gallery img{aspect-ratio:4/3}
+@media(min-width:701px){.product-page .beacon-project-gallery .gallery-portrait{grid-column:3;grid-row:1 / span 2;height:100%;min-height:0;aspect-ratio:auto}}
+@media(max-width:700px){.product-page .beacon-project-gallery img{aspect-ratio:auto;height:auto}}
