@@ -14,7 +14,7 @@ Preview is marked noindex. Remove that directive only when the final page is app
 
 - Website: https://beaconblinds.com/
 - Logo: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/beacon-blinds-logo-new_b5ee72f1.png
-- Hero: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/beacon-hero-motorized-shades-3AYZkvDCfiaBxyGeQvkzBu.webp
+- Hero: `dist/assets/beacon-living-room-hero.jpg`, generated with the built-in image generation tool on September 23, 2026. Illustrative living room; not a photograph of a Beacon installation. Prompt: `content/hero-image-prompt.txt`.
 - Dining room: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/hero-motorized-Qa5TWTET2He36AFjyXGCKc.webp
 - Consultation background: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-motorized-shades-1_a9ddb3a2.jpg
 - Fonts: Inter and Poppins, matching the other landing pages, from Google Fonts.
