@@ -47,7 +47,7 @@ form.addEventListener('submit', async event => {
   form.setAttribute('aria-busy', 'true');
   try {
     const payload = Object.fromEntries(new FormData(form));
-    payload.smsConsent = form.elements.smsConsent.checked;
+    payload.smsConsent = false;
     const response = await fetch('/api/consultation', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
