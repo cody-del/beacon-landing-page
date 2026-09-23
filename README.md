@@ -2,6 +2,8 @@
 
 Motorized-shades landing page for Beacon Blinds, with orange brand accents, Google and Facebook review badges, a customer-review carousel, an interactive Central Texas service-area map, and a consultation form.
 
+The installation gallery uses five client photos in a looping carousel with a large center image, smaller side images, orange arrows, photo selectors, keyboard navigation, touch swiping, and reduced-motion support.
+
 ## Run locally
 
 Requires Node.js 20 or newer. No package installation is needed.
