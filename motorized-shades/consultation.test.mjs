@@ -18,6 +18,7 @@ test('routes to Beacon with the correct service and explicit SMS consent', async
       assert.equal(body.name, 'Test Person');
       assert.equal(body.serviceType, 'Motorized & Smart Home');
       assert.equal(body.smsConsent, consent === true);
+      assert.equal(body.campaignTag, 'google_landing_page');
       return {ok:true, json:async()=>({success:true})};
     });
     assert.equal(result.body.success, true);
