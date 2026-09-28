@@ -17,6 +17,18 @@ export async function submitConsultation(data, fetcher = fetch) {
     companyWebsite: '',
     sourcePage: '/motorized-shades/',
     formName: 'Motorized shades landing page consultation',
+    // This is a separate site posting server to server, so no visitor cookie
+    // reaches beaconblinds.com and its attribution classifier has nothing to
+    // read — every lead from here would otherwise be filed as `direct`, which
+    // is the one thing paid traffic from a Google Ads landing page is not.
+    // Naming the channel is the only signal that survives the hop.
+    //
+    // This page owns the name. The receiving end validates the shape only
+    // (lowercase slug, 2-40 chars) and passes it through to GoHighLevel
+    // verbatim, so renaming the campaign is a change here and nowhere else.
+    // GHL matches tags literally: whatever is written here is exactly what the
+    // CRM workflows must filter on.
+    campaignTag: 'google_landing_page',
   };
   try {
     const response = await fetcher('https://beaconblinds.com/api/contact/', {
