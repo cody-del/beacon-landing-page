@@ -55,7 +55,7 @@ form.addEventListener('submit', async event => {
       signal: AbortSignal.timeout(25000),
     });
     const result = await response.json();
-    if (!response.ok || result.success !== true) throw new Error(result.error || 'We couldn’t confirm your request. Please call (512) 930-1188 for help.');
+    if (!response.ok || result.success !== true) throw new Error(result.error || 'We couldn’t confirm your request. Please call (830) 364-4591 for help.');
     form.hidden = true;
     form.reset();
     const success = document.querySelector('#consultation-success');
@@ -63,7 +63,7 @@ form.addEventListener('submit', async event => {
     success.focus();
   } catch (error) {
     errorBox.textContent = error.name === 'TimeoutError' || error instanceof TypeError || error instanceof SyntaxError
-      ? 'We couldn’t confirm your request. Please call (512) 930-1188 before submitting again.'
+      ? 'We couldn’t confirm your request. Please call (830) 364-4591 before submitting again.'
       : error.message;
     errorBox.hidden = false;
   } finally {

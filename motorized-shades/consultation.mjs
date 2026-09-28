@@ -1,7 +1,7 @@
 export async function submitConsultation(data, fetcher = fetch) {
   const fail = (status, error) => ({status, body: {success: false, error}});
   if (!data || typeof data !== 'object' || Array.isArray(data)) return fail(400, 'Please check your contact details.');
-  if (data.companyWebsite) return fail(400, 'Unable to submit this request. Please call (512) 930-1188.');
+  if (data.companyWebsite) return fail(400, 'Unable to submit this request. Please call (830) 364-4591.');
   const limits = {firstName: 100, lastName: 100, phone: 30, email: 254};
   for (const [field, limit] of Object.entries(limits)) {
     if (typeof data[field] !== 'string' || !data[field].trim() || data[field].trim().length > limit) return fail(400, 'Please complete all contact fields.');
@@ -24,9 +24,9 @@ export async function submitConsultation(data, fetcher = fetch) {
       body: JSON.stringify(payload), signal: AbortSignal.timeout(18000),
     });
     const result = await response.json();
-    if (!response.ok || result.success !== true) return fail(502, 'We couldn’t confirm your request. Please call (512) 930-1188 for help.');
+    if (!response.ok || result.success !== true) return fail(502, 'We couldn’t confirm your request. Please call (830) 364-4591 for help.');
     return {status: 200, body: {success: true}};
   } catch {
-    return fail(502, 'We couldn’t confirm your request. Please call (512) 930-1188 before submitting again.');
+    return fail(502, 'We couldn’t confirm your request. Please call (830) 364-4591 before submitting again.');
   }
 }
