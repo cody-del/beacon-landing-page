@@ -41,3 +41,7 @@ Six unique five-star Beacon Blinds reviews were transcribed from user-supplied s
 Leaflet map with one orange approximate outline matching the user-supplied service-area map. Community list, zoom controls, reset view, mobile layout, and a fallback are included. Geographic references and the reproducible boundary method are recorded in `dist/assets/map/SOURCES.md`. Run `python3 scripts/build-service-boundary.py` to rebuild and validate the outline from its stored screenshot trace.
 
 The five gallery project photographs were supplied by the user on September 22, 2026. Copies are stored as `dist/assets/beacon-gallery-*.jpg`; original files are unchanged.
+
+The gallery also includes the seven additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), for twelve photos total. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
+
+The Santa Rita Ranch image uses a separate landing-page JPEG with its printed number corrected to `(830) 364-4591` using the built-in image generation tool. Its edit prompt is saved in the gallery source manifest; the source website photo is unchanged.
