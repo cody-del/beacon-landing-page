@@ -42,6 +42,6 @@ Leaflet map with one orange approximate outline matching the user-supplied servi
 
 The five gallery project photographs were supplied by the user on September 22, 2026. Copies are stored as `dist/assets/beacon-gallery-*.jpg`; original files are unchanged.
 
-The gallery also includes the seven additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), for twelve photos total. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
+The gallery also includes the six additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), for eleven photos total. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
 
-The Santa Rita Ranch image uses a separate landing-page JPEG with its printed number corrected to `(830) 364-4591` using the built-in image generation tool. Its edit prompt is saved in the gallery source manifest; the source website photo is unchanged.
+The Santa Rita Ranch “Modern Shutters” photo was removed from the landing-page gallery at the user’s request.
