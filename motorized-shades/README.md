@@ -2,13 +2,25 @@
 
 Standalone responsive landing page in `dist/`. Start the preview and form backend with `node server.mjs` (Node 20+).
 
-Uses Beacon Blinds' existing logo, photography, phone number, service areas, and orange accents. The inline consultation form submits through the local `/api/consultation` route to Beacon’s existing `https://beaconblinds.com/api/contact/` endpoint. It includes server validation, a honeypot, optional SMS consent, and confirmed-success handling. Netlify hosting is configured in the repository-root `netlify.toml`; `netlify/functions/consultation.mjs` provides the same endpoint in production. Static-only hosting without that function cannot deliver submissions. The review rating and excerpt were taken from Beacon's homepage on September 21, 2026; recheck before launching advertising.
+Uses Beacon Blinds' existing logo, photography, service areas, and orange accents. The phone number shown, (830) 364-4591, is Beacon's call-tracking number for this landing page only. It is deliberately different from the main site's (512) 930-1188; do not change it to match. The inline consultation form submits through the local `/api/consultation` route to Beacon’s existing `https://beaconblinds.com/api/contact/` endpoint. It includes server validation, a honeypot, and confirmed-success handling. The optional SMS consent checkbox was removed, so every submission sends `smsConsent: false`. Netlify hosting is configured in the repository-root `netlify.toml`; `netlify/functions/consultation.mjs` provides the same endpoint in production. Static-only hosting without that function cannot deliver submissions. The review rating and excerpt were taken from Beacon's homepage on September 21, 2026; recheck before launching advertising.
 
-Preview is marked noindex. Remove that directive only when the final page is approved for indexing. No change has been made to beaconblinds.com.
+Preview is marked noindex. Remove that directive only when the final page is approved for indexing. The only change made to beaconblinds.com for this page is that its contact endpoint accepts the `campaignTag` field this page sends (`cody-del/beacon-blinds-rebuild` PR #51).
+
+## Google Ads tracking
+
+The page reports to Beacon's Google Ads account `AW-16673765845`, the same account and conversion actions as beaconblinds.com. That site's browser-side conversion never runs for leads from here, because they reach it server to server.
+
+- **Google tag:** in the `<head>` of `dist/index.html`.
+- **Lead form:** "SS - Submit Lead Form" (`AW-16673765845/cNjoCN3wx8EcENXz1Y4-`), fired from `dist/form.js` only after `/api/consultation` returns `success: true`. The email address is lowercased, trimmed, and SHA-256 hashed in the browser, then sent as enhanced-conversion `user_data`. Only the email is sent, never the phone number, matching the main site. If the tag is blocked or missing, nothing is sent and the form works as before.
+- **Phone calls:** "Phone Call" (`AW-16673765845/r_O1CPaQrcEcENXz1Y4-`), configured in the `<head>` with `phone_conversion_number: '(830) 364-4591'`. For visitors who arrive from a Google ad, Google swaps in a forwarding number by matching that exact string in the page text. The forwarding number then rings through to the 830 tracking number. The snippet supplied for the main site uses (512) 930-1188, which never appears on this page. If the displayed number ever changes, change this value in the same commit, character for character, or calls stop being tracked.
+
+Installed September 29, 2026. A conversion reaching Google Ads has not been observed yet.
 
 ## Verification
 
-`node --test consultation.test.mjs` checks validation, routing, consent, and rejection handling with an injected mock transport. No live test lead was sent to Beacon; actual delivery remains unverified.
+`node --test consultation.test.mjs consultation-http.test.mjs` checks validation, routing, consent, origin, and rejection handling with an injected mock transport. Netlify runs the same tests before every deploy.
+
+One live test lead was sent on September 29, 2026, before the Google tag was installed, so it recorded no conversion. It used the name "TEST LP Claude 2026-09-29", an `example.com` address, and a 555 phone number. Both this page's function and beaconblinds.com's endpoint returned success. Its arrival and `google_landing_page` tag in GoHighLevel have not been checked yet; delete the contact once they have.
 
 ## Asset sources
 
@@ -17,7 +29,7 @@ Preview is marked noindex. Remove that directive only when the final page is app
 - Hero: `dist/assets/beacon-living-room-hero.jpg`, generated with the built-in image generation tool on September 23, 2026. Illustrative living room; not a photograph of a Beacon installation. Prompt: `content/hero-image-prompt.txt`.
 - Dining room: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/hero-motorized-Qa5TWTET2He36AFjyXGCKc.webp
 - Consultation background: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-motorized-shades-1_a9ddb3a2.jpg
-- Fonts: Inter and Poppins, matching the other landing pages, from Google Fonts.
+- Fonts: Inter and Poppins, matching the other landing pages, self-hosted as `dist/assets/*.ttf`. The page makes no Google Fonts request.
 - Layout and shared styles: adapted directly from The Shutter Factory motorized-shades landing page.
 
 ## Review carousel
