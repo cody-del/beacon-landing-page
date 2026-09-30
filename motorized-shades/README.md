@@ -8,13 +8,13 @@ Preview is marked noindex. Remove that directive only when the final page is app
 
 ## Google Ads tracking
 
-The page reports to Beacon's Google Ads account `AW-16673765845`, the same account and conversion actions as beaconblinds.com. That site's browser-side conversion never runs for leads from here, because they reach it server to server.
+The page reports to two Google Ads accounts. Lead-form conversions go to Beacon's account `AW-16673765845`, the same account and conversion action as beaconblinds.com. That site's browser-side conversion never runs for leads from here, because they reach it server to server. Phone-call conversions go to `AW-726943250`.
 
-- **Google tag:** in the `<head>` of `dist/index.html`.
+- **Google tag:** in the `<head>` of `dist/index.html`. The script loads `AW-16673765845`, and both account IDs are configured beneath it.
 - **Lead form:** "SS - Submit Lead Form" (`AW-16673765845/cNjoCN3wx8EcENXz1Y4-`), fired from `dist/form.js` only after `/api/consultation` returns `success: true`. The email address is lowercased, trimmed, and SHA-256 hashed in the browser, then sent as enhanced-conversion `user_data`. Only the email is sent, never the phone number, matching the main site. If the tag is blocked or missing, nothing is sent and the form works as before.
-- **Phone calls:** "Phone Call" (`AW-16673765845/r_O1CPaQrcEcENXz1Y4-`), configured in the `<head>` with `phone_conversion_number: '(830) 364-4591'`. For visitors who arrive from a Google ad, Google swaps in a forwarding number by matching that exact string in the page text. The forwarding number then rings through to the 830 tracking number. The snippet supplied for the main site uses (512) 930-1188, which never appears on this page. If the displayed number ever changes, change this value in the same commit, character for character, or calls stop being tracked.
+- **Phone calls:** `AW-726943250/uOLuCP666IsdEJKM0doC`, configured in the `<head>` with `phone_conversion_number: '(830) 364-4591'`. For visitors who arrive from a Google ad, Google swaps in a forwarding number by matching that exact string in the page text. The forwarding number then rings through to the 830 tracking number. The snippet supplied for the main site uses (512) 930-1188, which never appears on this page. If the displayed number ever changes, change this value in the same commit, character for character, or calls stop being tracked.
 
-Installed September 29, 2026. A conversion reaching Google Ads has not been observed yet.
+Installed September 29, 2026. The phone-call conversion moved from `AW-16673765845/r_O1CPaQrcEcENXz1Y4-` to `AW-726943250` on September 30, 2026. A conversion reaching Google Ads has not been observed yet.
 
 ## Verification
 
