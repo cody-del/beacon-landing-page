@@ -15,6 +15,7 @@
 .paper-ratings .review-badge strong{display:flex;align-items:center;gap:4px;min-height:23px;line-height:23px}
 .paper-ratings .badge-stars{line-height:23px}
 
+.hardwood-made-copy>.paper-button{margin-top:28px}
 /* Consultation links land on the complete form card, including after success. */
 .consultation-anchor{min-width:0;scroll-margin-top:24px}
 @media(max-width:700px){

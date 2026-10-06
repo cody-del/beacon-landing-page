@@ -27,7 +27,7 @@ One live test lead was sent on September 29, 2026, before the Google tag was ins
 - Website: https://beaconblinds.com/
 - Logo: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/beacon-blinds-logo-new_b5ee72f1.png
 - Hero: `dist/assets/beacon-shades-hero.mp4`, a silent 24-second, 1280×720 H.264 montage of four client-supplied installation videos from October 6, 2026. Crossfades connect the rooms and wrap into the opening shot. The poster is a frame from this edit. `hero-video.js` respects reduced motion and data saving, pauses outside the viewport, and provides a play/pause button. The former generated hero photo is no longer displayed. Source and edit details: `content/hero-video-sources.json`.
-- Dining room: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/hero-motorized-Qa5TWTET2He36AFjyXGCKc.webp
+- Motorization experts section: `dist/assets/beacon-project-high-rise-closed-shades.webp`, a real client-supplied dining-room photograph from the October 6 ZIP (source `48963b4e-3e11-4d5d-9abe-efde47bdb19b~1.jpg`).
 - Consultation background: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-motorized-shades-1_a9ddb3a2.jpg
 - Fonts: Inter and Poppins, matching the other landing pages, self-hosted as `dist/assets/*.ttf`. The page makes no Google Fonts request.
 - Layout and shared styles: adapted directly from The Shutter Factory motorized-shades landing page.
