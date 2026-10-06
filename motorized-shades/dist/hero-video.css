@@ -6,4 +6,5 @@
 .hero-video-toggle{position:absolute;right:26px;bottom:16px;z-index:1;padding:9px 14px;border:1px solid #ffffff80;border-radius:999px;color:#fff;background:#111b;font:500 12px/1.2 Inter,sans-serif;cursor:pointer}
 .hero-video-toggle:hover{background:#111e}
 .hero-video-toggle[hidden]{display:none}
-@media(max-width:700px){.hero-video-toggle{right:16px;bottom:12px}.paper-hero::before{background:linear-gradient(rgb(12 15 17 / .45),rgb(12 15 17 / .6) 55%,rgb(12 15 17 / .82))}}
+/* Favor the left-hand shades instead of the wall between windows on phones. */
+@media(max-width:700px){.hero-video{object-position:20% center}.paper-hero{background-position:20% center}.hero-video-toggle{right:16px;bottom:12px}.paper-hero::before{background:linear-gradient(rgb(12 15 17 / .45),rgb(12 15 17 / .6) 55%,rgb(12 15 17 / .82))}}
