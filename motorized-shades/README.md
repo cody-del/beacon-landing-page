@@ -49,3 +49,5 @@ The Santa Rita Ranch “Modern Shutters” photo was removed from the landing-pa
 Six more client-supplied photos from `drive-download-20261006T184431Z-1-001.zip` were added on October 6, 2026, bringing the carousel to fifteen photos after the removals below. These are optimized, orientation-corrected 1600px WebP copies; originals are unchanged. The same archive contained four unique video clips and two duplicate copies, used for the hero montage.
 
 The Silhouette home-office photo and the plantation-shutter installation photo were removed from the carousel on October 6, 2026 at the user’s request. Their source details are retained under `excluded_assets` in the gallery manifest.
+
+Consultation CTAs and the existing `#consultation` sitelink target a wrapper around the form and its success state. On mobile, the compact form uses side-by-side name fields and full-width phone/email fields so the complete default card fits a 375×667 viewport. Native anchor navigation preserves keyboard use, browser history, and reduced-motion preferences.

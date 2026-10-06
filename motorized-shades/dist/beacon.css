@@ -14,3 +14,21 @@
 /* Match both review badges’ star-row and caption baselines. */
 .paper-ratings .review-badge strong{display:flex;align-items:center;gap:4px;min-height:23px;line-height:23px}
 .paper-ratings .badge-stars{line-height:23px}
+
+/* Consultation links land on the complete form card, including after success. */
+.consultation-anchor{min-width:0;scroll-margin-top:24px}
+@media(max-width:700px){
+  .consultation-anchor{scroll-margin-top:12px}
+  .hardwood-consultation .hardwood-form{padding:22px 18px}
+  .hardwood-consultation .hardwood-form-heading{margin-bottom:18px}
+  .hardwood-consultation .hardwood-form-heading h3{font-size:22px}
+  .hardwood-consultation .hardwood-form-heading p{font-size:14px;line-height:1.45;margin-top:8px}
+  .hardwood-consultation .hardwood-form-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .hardwood-consultation .hardwood-field:nth-child(n+3){grid-column:1/-1}
+  .hardwood-consultation .hardwood-field label{margin-bottom:6px}
+  .hardwood-consultation .hardwood-field input{height:48px;padding:12px}
+  .hardwood-consultation .hardwood-submit{margin-top:18px}
+  .hardwood-consultation .hardwood-form-note{margin-top:12px;line-height:1.45}
+  .hardwood-consultation .hardwood-form-reassurance{margin-top:14px;padding-top:12px;gap:6px 14px}
+  .hardwood-consultation .hardwood-google-badge{margin-top:12px}
+}
