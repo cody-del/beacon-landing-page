@@ -33,7 +33,6 @@
 .review-dialog-close{width:40px;height:40px;display:grid;place-items:center;font:30px/1 Arial,sans-serif;background:#f3f3f3;border:0;border-radius:50%;cursor:pointer;color:#555b5e}
 .review-dialog h2{font:600 23px/1.35 Inter,Arial,sans-serif;color:#282a27;margin:23px 0 18px}
 #review-dialog-text p{font-size:16px;line-height:1.75;margin:0 0 18px;color:#555b5e;white-space:pre-line}
-.review-dialog-google{font-size:14px;color:#905211;text-underline-offset:4px;display:inline-block;margin-top:4px}
 @media(max-width:1500px){.reviews-layout{grid-template-columns:140px 30px minmax(0,1fr) 30px;gap:10px}.reviews-section{padding-inline:20px}.reviews-google-lockup{font-size:20px;gap:12px}}
 @media(min-width:1024px) and (max-width:1500px){.reviews-track{grid-auto-columns:calc((100% - 42px)/4);gap:14px}.reviews-card{padding:22px 14px}.reviews-card-top{gap:8px}.reviews-card .reviews-stars{font-size:24px}.reviews-card .reviews-google-icon{width:20px;height:20px}.reviews-author{gap:9px}.reviews-avatar{width:34px;height:34px;font-size:21px}.reviews-name{font-size:14px}.reviews-arrow{width:30px;height:30px}}
 @media(max-width:1023px){.reviews-track{grid-auto-columns:calc((100% - 20px)/2)}.reviews-layout{grid-template-columns:140px 32px minmax(0,1fr) 32px}.reviews-card{padding:22px 20px}}
