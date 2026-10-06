@@ -2,7 +2,7 @@
 
 Motorized-shades landing page for Beacon Blinds, with orange brand accents, Google and Facebook review badges, a customer-review carousel, an interactive Central Texas service-area map, and a consultation form.
 
-The installation gallery uses fifteen photos in a looping carousel with a large center image, smaller side images, orange arrows, photo selectors, keyboard navigation, touch swiping, and reduced-motion support.
+The installation gallery uses fourteen photos in a looping carousel with a large center image, smaller side images, orange arrows, photo selectors, keyboard navigation, touch swiping, and reduced-motion support.
 
 The hero plays a muted, 24-second loop edited from four client-supplied installation videos, with a pause button and a real installation photo fallback for reduced motion, data saving, or playback failures.
 

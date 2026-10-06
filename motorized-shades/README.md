@@ -42,12 +42,14 @@ Leaflet map with one orange approximate outline matching the user-supplied servi
 
 The five gallery project photographs were supplied by the user on September 22, 2026. Copies are stored as `dist/assets/beacon-gallery-*.jpg`; original files are unchanged.
 
-The gallery also includes four additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), alongside the five original client photos. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
+The gallery also includes three additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), alongside the five original client photos. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
 
 The Santa Rita Ranch “Modern Shutters” photo was removed from the landing-page gallery at the user’s request.
 
-Six more client-supplied photos from `drive-download-20261006T184431Z-1-001.zip` were added on October 6, 2026, bringing the carousel to fifteen photos after the removals below. These are optimized, orientation-corrected 1600px WebP copies; originals are unchanged. The same archive contained four unique video clips and two duplicate copies, used for the hero montage.
+Six more client-supplied photos from `drive-download-20261006T184431Z-1-001.zip` were added on October 6, 2026, bringing the carousel to fourteen photos after the removals below. These are optimized, orientation-corrected 1600px WebP copies; originals are unchanged. The same archive contained four unique video clips and two duplicate copies, used for the hero montage.
 
 The Silhouette home-office photo and the plantation-shutter installation photo were removed from the carousel on October 6, 2026 at the user’s request. Their source details are retained under `excluded_assets` in the gallery manifest.
 
 Consultation CTAs and the existing `#consultation` sitelink target a wrapper around the form and its success state. On mobile, the compact form uses side-by-side name fields and full-width phone/email fields so the complete default card fits a 375×667 viewport. Native anchor navigation preserves keyboard use, browser history, and reduced-motion preferences.
+
+The photo of an installer fitting a blind beneath an arched window was also removed from the carousel on October 6, 2026 at the user’s request.
