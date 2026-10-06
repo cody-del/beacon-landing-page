@@ -42,8 +42,10 @@ Leaflet map with one orange approximate outline matching the user-supplied servi
 
 The five gallery project photographs were supplied by the user on September 22, 2026. Copies are stored as `dist/assets/beacon-gallery-*.jpg`; original files are unchanged.
 
-The gallery also includes the six additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), for eleven photos total. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
+The gallery also includes four additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), alongside the five original client photos. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
 
 The Santa Rita Ranch “Modern Shutters” photo was removed from the landing-page gallery at the user’s request.
 
-Six more client-supplied photos from `drive-download-20261006T184431Z-1-001.zip` were added on October 6, 2026, bringing the carousel to seventeen photos. These are optimized, orientation-corrected 1600px WebP copies; originals are unchanged. The same archive contained four unique video clips and two duplicate copies, used for the hero montage.
+Six more client-supplied photos from `drive-download-20261006T184431Z-1-001.zip` were added on October 6, 2026, bringing the carousel to fifteen photos after the removals below. These are optimized, orientation-corrected 1600px WebP copies; originals are unchanged. The same archive contained four unique video clips and two duplicate copies, used for the hero montage.
+
+The Silhouette home-office photo and the plantation-shutter installation photo were removed from the carousel on October 6, 2026 at the user’s request. Their source details are retained under `excluded_assets` in the gallery manifest.

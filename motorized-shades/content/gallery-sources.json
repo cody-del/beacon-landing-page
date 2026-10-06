@@ -2,20 +2,14 @@
   "source": "https://beaconblinds.com/recent-jobs/",
   "photos_on_website": 10,
   "existing_gallery_photos": 5,
-  "new_photos": 6,
-  "total_gallery_photos": 17,
+  "new_photos": 4,
+  "total_gallery_photos": 15,
   "duplicates_already_present": [
     "1000026934 (patio doors)",
     "1000026945 (outdoor kitchen)",
     "1000026930 (corner shades)"
   ],
   "assets": [
-    {
-      "file": "assets/beacon-website-job-patio-shades-1_a45ca1fc-1280-v1.webp",
-      "source": "https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-patio-shades-1_a45ca1fc.jpg",
-      "alt": "Silhouette shades filtering daylight beside a home office",
-      "note": "Optimized copy from the separate website checkout; website files unchanged."
-    },
     {
       "file": "assets/beacon-website-job-bo-shades_c94bbb1c-1280-v1.webp",
       "source": "https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-bo-shades_c94bbb1c.jpg",
@@ -32,12 +26,6 @@
       "file": "assets/beacon-website-job-roller-shades-2_f545161e-1280-v1.webp",
       "source": "https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-roller-shades-2_f545161e.jpg",
       "alt": "Installer fitting a faux wood blind beneath an arched window",
-      "note": "Optimized copy from the separate website checkout; website files unchanged."
-    },
-    {
-      "file": "assets/beacon-website-job-roller-shades-3_d55022e1-1280-v1.webp",
-      "source": "https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-roller-shades-3_d55022e1.jpg",
-      "alt": "Installer positioning a white plantation shutter panel",
       "note": "Optimized copy from the separate website checkout; website files unchanged."
     },
     {
@@ -102,7 +90,25 @@
     }
   ],
   "excluded_photos": [
-    "Modern Shutters: Santa Rita Ranch \u2014 removed at user request"
+    "Modern Shutters: Santa Rita Ranch \u2014 removed at user request",
+    "Silhouette shades beside a home office \u2014 removed at user request",
+    "Installer positioning a plantation shutter \u2014 removed at user request"
   ],
-  "user_archive_photos_added": 6
+  "user_archive_photos_added": 6,
+  "excluded_assets": [
+    {
+      "file": "assets/beacon-website-job-patio-shades-1_a45ca1fc-1280-v1.webp",
+      "source": "https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-patio-shades-1_a45ca1fc.jpg",
+      "alt": "Silhouette shades filtering daylight beside a home office",
+      "note": "Optimized copy from the separate website checkout; website files unchanged.",
+      "reason": "Removed from carousel at user request on 2026-10-06."
+    },
+    {
+      "file": "assets/beacon-website-job-roller-shades-3_d55022e1-1280-v1.webp",
+      "source": "https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-roller-shades-3_d55022e1.jpg",
+      "alt": "Installer positioning a white plantation shutter panel",
+      "note": "Optimized copy from the separate website checkout; website files unchanged.",
+      "reason": "Removed from carousel at user request on 2026-10-06."
+    }
+  ]
 }
