@@ -1,0 +1,48 @@
+{
+  "source_archive": "drive-download-20261006T184431Z-1-001.zip",
+  "received": "2026-10-06",
+  "output": "assets/beacon-shades-hero.mp4",
+  "poster": "assets/beacon-shades-hero-poster.jpg",
+  "edit": {
+    "size": "1280x720",
+    "fps": 24,
+    "codec": "H.264 High Level 3.1 / yuv420p",
+    "audio": "removed",
+    "duration_seconds": 23.958333,
+    "source_start_seconds": 1,
+    "source_duration_seconds": 10.125,
+    "playback_speed": 1.5,
+    "clip_duration_seconds": 6.75,
+    "crossfade_seconds": 0.75,
+    "crossfade_offsets_seconds": [
+      6,
+      12,
+      18,
+      24
+    ],
+    "loop": "Append the first 0.75 seconds as a final crossfade; trim the montage to 0.75\u201324.75 seconds so its end joins its start.",
+    "encoding": "libx264, preset slow, CRF 25, maxrate 1800k, bufsize 3600k, faststart, metadata removed"
+  },
+  "sources": [
+    {
+      "file": "20260923_153250~4.mp4",
+      "sha256": "9e5a9a3ad477ce3b23919d44882d1c89d451bb7b1da9ca2511847b617c4856fd"
+    },
+    {
+      "file": "20261002_140623~2.mp4",
+      "sha256": "718a0925535a86ca090400665b6fc199c5891e7e73d6cc82def7ecf4c270acd6"
+    },
+    {
+      "file": "20261002_135846~5.mp4",
+      "sha256": "7af199fe5fe52d08f4f8dde23975f81ad4d0521b391404a28a6c30db2cae7220"
+    },
+    {
+      "file": "20260923_114653~3.mp4",
+      "sha256": "6eef082d2d458252ef2c6130c22f476cef3667b1a0eaa39749add51b720c9dca"
+    }
+  ],
+  "duplicate_copies_omitted": [
+    "20260923_114653~3(1).mp4",
+    "20260923_153250~4(1).mp4"
+  ]
+}

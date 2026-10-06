@@ -6,7 +6,7 @@ import {submitConsultation} from './consultation.mjs';
 
 const root = fileURLToPath(new URL('./dist/', import.meta.url));
 const port = 4318;
-const types = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.ttf':'font/ttf'};
+const types = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.mp4':'video/mp4','.ttf':'font/ttf'};
 http.createServer(async (req, res) => {
   const send = (status, body) => {
     res.writeHead(status, {'Content-Type':'application/json','Cache-Control':'no-store'});

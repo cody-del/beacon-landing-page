@@ -26,7 +26,7 @@ One live test lead was sent on September 29, 2026, before the Google tag was ins
 
 - Website: https://beaconblinds.com/
 - Logo: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/beacon-blinds-logo-new_b5ee72f1.png
-- Hero: `dist/assets/beacon-living-room-hero.jpg`, generated with the built-in image generation tool on September 23, 2026. Illustrative living room; not a photograph of a Beacon installation. Prompt: `content/hero-image-prompt.txt`.
+- Hero: `dist/assets/beacon-shades-hero.mp4`, a silent 24-second, 1280×720 H.264 montage of four client-supplied installation videos from October 6, 2026. Crossfades connect the rooms and wrap into the opening shot. The poster is a frame from this edit. `hero-video.js` respects reduced motion and data saving, pauses outside the viewport, and provides a play/pause button. The former generated hero photo is no longer displayed. Source and edit details: `content/hero-video-sources.json`.
 - Dining room: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/hero-motorized-Qa5TWTET2He36AFjyXGCKc.webp
 - Consultation background: https://pub-3a548384bf414e35a2afbd74ba7be033.r2.dev/images/job-motorized-shades-1_a9ddb3a2.jpg
 - Fonts: Inter and Poppins, matching the other landing pages, self-hosted as `dist/assets/*.ttf`. The page makes no Google Fonts request.
@@ -45,3 +45,5 @@ The five gallery project photographs were supplied by the user on September 22, 
 The gallery also includes the six additional photos from the website’s [Recent Jobs gallery](https://beaconblinds.com/recent-jobs/), for eleven photos total. Three website photos were already present and are not duplicated. Optimized copies are stored as `dist/assets/beacon-website-*`. Source URLs are recorded in `content/gallery-sources.json`. The website’s video is not included in the photo carousel.
 
 The Santa Rita Ranch “Modern Shutters” photo was removed from the landing-page gallery at the user’s request.
+
+Six more client-supplied photos from `drive-download-20261006T184431Z-1-001.zip` were added on October 6, 2026, bringing the carousel to seventeen photos. These are optimized, orientation-corrected 1600px WebP copies; originals are unchanged. The same archive contained four unique video clips and two duplicate copies, used for the hero montage.
