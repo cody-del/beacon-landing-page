@@ -33,3 +33,6 @@
   .hardwood-consultation .hardwood-form-reassurance{margin-top:14px;padding-top:12px;gap:6px 14px}
   .hardwood-consultation .hardwood-google-badge{margin-top:12px}
 }
+
+/* Keep the full hero introduction to three balanced lines on desktop. */
+@media(min-width:1024px){.paper-description{max-width:900px;text-wrap:balance}}
