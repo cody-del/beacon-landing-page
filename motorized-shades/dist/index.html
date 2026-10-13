@@ -8,12 +8,12 @@
 
   gtag('config', 'AW-16673765845');
 
-  // Phone Call conversion, reported to AW-726943250 (the lead form still reports
-  // to AW-16673765845). Google swaps in a forwarding number by matching this
-  // exact string in the page text, so it must stay byte-identical to the number
-  // displayed here — the main site's snippet uses (512) 930-1188, which never
-  // appears on this page.
-  gtag('config', 'AW-726943250/uOLuCP666IsdEJKM0doC', {
+  // Phone Call conversion: Beacon's own "Call ((830) 364-4591)" action. Google
+  // swaps in a forwarding number by matching this exact string in the page text,
+  // so it must stay byte-identical to the number displayed here — the main site's
+  // snippet uses (512) 930-1188, which never appears on this page. From Sep 30 to
+  // Oct 13, 2026 it pointed at the Naples Shutter account by mistake (see README).
+  gtag('config', 'AW-16673765845/4h04CM2734sdENXz1Y4-', {
     'phone_conversion_number': '(830) 364-4591'
   });
 </script>
