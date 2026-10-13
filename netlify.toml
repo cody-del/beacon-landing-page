@@ -1,7 +1,7 @@
 [build]
   base = "."
   publish = "motorized-shades/dist"
-  command = "node --test motorized-shades/consultation.test.mjs motorized-shades/consultation-http.test.mjs"
+  command = "node --test motorized-shades/consultation.test.mjs motorized-shades/consultation-http.test.mjs motorized-shades/tracking.test.mjs"
 
 [build.environment]
   NODE_VERSION = "22"

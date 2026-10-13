@@ -8,17 +8,17 @@ Preview is marked noindex. Remove that directive only when the final page is app
 
 ## Google Ads tracking
 
-The page reports to two Google Ads accounts. Lead-form conversions go to Beacon's account `AW-16673765845`, the same account and conversion action as beaconblinds.com. That site's browser-side conversion never runs for leads from here, because they reach it server to server. Phone-call conversions go to `AW-726943250`.
+The page reports to Beacon's Google Ads account, `AW-16673765845`. Lead-form conversions use the same conversion action as beaconblinds.com. That site's browser-side conversion never runs for leads from here, because they reach it server to server.
 
-- **Google tag:** in the `<head>` of `dist/index.html`. The script loads and configures `AW-16673765845`. `AW-726943250` appears only in the phone-call snippet beneath it.
+- **Google tag:** in the `<head>` of `dist/index.html`. The script loads and configures `AW-16673765845`.
 - **Lead form:** "SS - Submit Lead Form" (`AW-16673765845/cNjoCN3wx8EcENXz1Y4-`), fired from `dist/form.js` only after `/api/consultation` returns `success: true`. The email address is lowercased, trimmed, and SHA-256 hashed in the browser, then sent as enhanced-conversion `user_data`. Only the email is sent, never the phone number, matching the main site. If the tag is blocked or missing, nothing is sent and the form works as before.
-- **Phone calls:** `AW-726943250/uOLuCP666IsdEJKM0doC`, configured in the `<head>` with `phone_conversion_number: '(830) 364-4591'`. For visitors who arrive from a Google ad, Google swaps in a forwarding number by matching that exact string in the page text. The forwarding number then rings through to the 830 tracking number. The snippet supplied for the main site uses (512) 930-1188, which never appears on this page. If the displayed number ever changes, change this value in the same commit, character for character, or calls stop being tracked.
+- **Phone calls:** `AW-16673765845/4h04CM2734sdENXz1Y4-` (the "Call ((830) 364-4591)" action, created September 30, 2026), configured in the `<head>` with `phone_conversion_number: '(830) 364-4591'`. For visitors who arrive from a Google ad, Google swaps in a forwarding number by matching that exact string in the page text. The forwarding number then rings through to the 830 tracking number. The snippet supplied for the main site uses (512) 930-1188, which never appears on this page. If the displayed number ever changes, change this value in the same commit, character for character, or calls stop being tracked.
 
-Installed September 29, 2026. The phone-call conversion moved from `AW-16673765845/r_O1CPaQrcEcENXz1Y4-` to `AW-726943250` on September 30, 2026. A conversion reaching Google Ads has not been observed yet.
+Installed September 29, 2026. On September 30 the phone-call snippet was switched to `AW-726943250/uOLuCP666IsdEJKM0doC`. That ID is the Naples Shutter account (its call actions use other labels), so from then on calls from this page counted in neither account, and Beacon's own call action recorded nothing. It was pointed back at Beacon's action on October 13, 2026. `tracking.test.mjs` fails if another account's ID returns. A conversion reaching Google Ads has not been observed yet.
 
 ## Verification
 
-`node --test consultation.test.mjs consultation-http.test.mjs` checks validation, routing, consent, origin, and rejection handling with an injected mock transport. Netlify runs the same tests before every deploy.
+`node --test consultation.test.mjs consultation-http.test.mjs tracking.test.mjs` checks validation, routing, consent, origin, and rejection handling with an injected mock transport. `tracking.test.mjs` pins the Google tag, both conversion labels, the call-tracking number, and that only Beacon's account appears on the page. Netlify runs the same tests before every deploy.
 
 One live test lead was sent on September 29, 2026, before the Google tag was installed, so it recorded no conversion. It used the name "TEST LP Claude 2026-09-29", an `example.com` address, and a 555 phone number. Both this page's function and beaconblinds.com's endpoint returned success. Its arrival and `google_landing_page` tag in GoHighLevel have not been checked yet; delete the contact once they have.
 

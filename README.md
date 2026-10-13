@@ -20,7 +20,7 @@ Open http://127.0.0.1:4318/.
 ## Validate
 
 ```sh
-node --test motorized-shades/consultation.test.mjs motorized-shades/consultation-http.test.mjs
+node --test motorized-shades/consultation.test.mjs motorized-shades/consultation-http.test.mjs motorized-shades/tracking.test.mjs
 python3 motorized-shades/scripts/build-service-boundary.py
 ```
 
@@ -42,4 +42,4 @@ The `beaconblindsland` project is connected to `main` in this repository. Netlif
 
 ## Tracking
 
-The page carries Beacon's Google Ads tag (`AW-16673765845`). It reports the "SS - Submit Lead Form" conversion there after a confirmed submission. Phone calls to the page's number, (830) 364-4591, are reported to a second account, `AW-726943250`. That number is Beacon's call-tracking number for this landing page only, not the main site's (512) 930-1188. If the displayed number changes, the `phone_conversion_number` in `dist/index.html` must change with it. See [project notes](motorized-shades/README.md#google-ads-tracking) for details.
+The page carries Beacon's Google Ads tag (`AW-16673765845`). It reports the "SS - Submit Lead Form" conversion there after a confirmed submission. Phone calls to the page's number, (830) 364-4591, are reported to the same account, through the "Call ((830) 364-4591)" action. That number is Beacon's call-tracking number for this landing page only, not the main site's (512) 930-1188. If the displayed number changes, the `phone_conversion_number` in `dist/index.html` must change with it. See [project notes](motorized-shades/README.md#google-ads-tracking) for details.
