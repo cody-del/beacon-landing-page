@@ -2,6 +2,10 @@
 
 Standalone responsive landing page in `dist/`. Start the preview and form backend with `node server.mjs` (Node 20+).
 
+The exterior-shades version is at `/exterior-shades/` (`dist/exterior-shades/index.html`). It shares the original design, reviews, map, and form scripts, with outdoor copy and no gallery. Its hero uses the real poolside-patio photo, and the feature section uses the real outdoor-kitchen photo. The client will supply an outdoor hero video later. The motorized page remains at `/`.
+
+Exterior form requests include `product: exterior-shades`. The server maps this to `Solar & Exterior Shades`, `/exterior-shades/`, and `Exterior shades landing page consultation`; absent product values retain the existing motorized routing. Both pages use the same Beacon Ads conversion actions and `google_landing_page` campaign tag.
+
 Uses Beacon Blinds' existing logo, photography, service areas, and orange accents. The phone number shown, (830) 364-4591, is Beacon's call-tracking number for this landing page only. It is deliberately different from the main site's (512) 930-1188; do not change it to match. The inline consultation form submits through the local `/api/consultation` route to Beacon’s existing `https://beaconblinds.com/api/contact/` endpoint. It includes server validation, a honeypot, and confirmed-success handling. The optional SMS consent checkbox was removed, so every submission sends `smsConsent: false`. Netlify hosting is configured in the repository-root `netlify.toml`; `netlify/functions/consultation.mjs` provides the same endpoint in production. Static-only hosting without that function cannot deliver submissions. The review rating and excerpt were taken from Beacon's homepage on September 21, 2026; recheck before launching advertising.
 
 Preview is marked noindex. Remove that directive only when the final page is approved for indexing. The only change made to beaconblinds.com for this page is that its contact endpoint accepts the `campaignTag` field this page sends (`cody-del/beacon-blinds-rebuild` PR #51).

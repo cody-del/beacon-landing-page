@@ -6,7 +6,7 @@
   async function initialize() {
     try {
       if (!window.L) throw new Error('Map library unavailable');
-      const response = await fetch('assets/map/service-area.geojson');
+      const response = await fetch('/assets/map/service-area.geojson');
       if (!response.ok) throw new Error('Boundary unavailable');
       const data = await response.json();
       if (data.features?.length !== 1 || data.features[0].geometry?.type !== 'Polygon') throw new Error('Invalid service boundary');

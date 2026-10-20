@@ -2,6 +2,9 @@ const form = document.querySelector('#consultation-form');
 const button = form.querySelector('button[type="submit"]');
 const errorBox = document.querySelector('#form-error');
 const fields = ['firstName', 'lastName', 'phone', 'email'];
+const formName = form.elements.product?.value === 'exterior-shades'
+  ? 'Exterior shades landing page consultation'
+  : 'Motorized shades landing page consultation';
 let pending = false;
 
 // Google Ads conversion "SS - Submit Lead Form" — the same action beaconblinds.com
@@ -32,7 +35,7 @@ async function trackLeadConversion(email) {
     } catch {
       // Send the conversion without user data rather than not at all.
     }
-    window.gtag('event', 'conversion', {send_to: LEAD_CONVERSION, form_name: 'Motorized shades landing page consultation'});
+    window.gtag('event', 'conversion', {send_to: LEAD_CONVERSION, form_name: formName});
   } catch {
     // Tracking must never surface an error to the visitor.
   }
