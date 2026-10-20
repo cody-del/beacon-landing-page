@@ -1,7 +1,13 @@
 /* Outdoor photography and crops, with the established landing-page layout. */
 .product-exterior-shades .paper-hero {
-  background-image: linear-gradient(rgb(15 22 25 / .48), rgb(15 22 25 / .52) 55%, rgb(15 22 25 / .76)), url('/assets/beacon-website-1000027133_4c95f9f3-1280-v1.webp');
-  background-position: center 60%;
+  background-image: url('/assets/beacon-exterior-hero-poster.jpg');
+  background-position: center;
+}
+.product-exterior-shades .paper-hero::before {
+  background: linear-gradient(rgb(15 22 25 / .58), rgb(15 22 25 / .64) 55%, rgb(15 22 25 / .82));
+}
+.product-exterior-shades .hero-video {
+  object-position: center;
 }
 .product-exterior-shades .hardwood-workshop img {
   object-position: center;
@@ -11,6 +17,9 @@
 }
 @media (max-width: 767px) {
   .product-exterior-shades .paper-hero {
-    background-position: 50% center;
+    background-position: 35% center;
+  }
+  .product-exterior-shades .hero-video {
+    object-position: 35% center;
   }
 }

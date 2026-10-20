@@ -2,7 +2,7 @@
 
 Standalone responsive landing page in `dist/`. Start the preview and form backend with `node server.mjs` (Node 20+).
 
-The exterior-shades version is at `/exterior-shades/` (`dist/exterior-shades/index.html`). It shares the original design, reviews, map, and form scripts, with outdoor copy and no gallery. Its hero uses the real poolside-patio photo, and the feature section uses the real outdoor-kitchen photo. The client will supply an outdoor hero video later. The motorized page remains at `/`.
+The exterior-shades version is at `/exterior-shades/` (`dist/exterior-shades/index.html`). It shares the original design, reviews, map, and form scripts, with outdoor copy and no gallery. Its hero uses the client-supplied `20260701_083222.mp4`, a 15.7-second poolside exterior-shade clip, optimized as `beacon-exterior-hero.mp4` with audio removed and fast-start enabled. A frame from the same clip is the fallback poster. The shared video controls respect reduced motion and data saving. The mobile crop favors the left patio shades. The feature section uses the real outdoor-kitchen photo. The motorized page remains at `/`.
 
 Exterior form requests include `product: exterior-shades`. The server maps this to `Solar & Exterior Shades`, `/exterior-shades/`, and `Exterior shades landing page consultation`; absent product values retain the existing motorized routing. Both pages use the same Beacon Ads conversion actions and `google_landing_page` campaign tag.
 
