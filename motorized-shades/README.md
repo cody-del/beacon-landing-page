@@ -4,11 +4,21 @@ Standalone responsive landing page in `dist/`. Start the preview and form backen
 
 The exterior-shades version is at `/exterior-shades/` (`dist/exterior-shades/index.html`). It shares the original design, reviews, map, and form scripts, with outdoor copy and no gallery. Its hero uses the client-supplied `20260701_083222.mp4`, a 15.7-second poolside exterior-shade clip, optimized as `beacon-exterior-hero.mp4` with audio removed and fast-start enabled. A frame from the same clip is the fallback poster. The shared video controls respect reduced motion and data saving. The mobile crop favors the left patio shades. The feature section uses the real outdoor-kitchen photo. The motorized page remains at `/`.
 
-Exterior form requests include `product: exterior-shades`. The server maps this to `Solar & Exterior Shades`, `/exterior-shades/`, and `Exterior shades landing page consultation`; absent product values retain the existing motorized routing. Both pages use the same Beacon Ads conversion actions and `google_landing_page` campaign tag.
+Exterior form requests include `product: exterior-shades`. The server maps this to `Solar & Exterior Shades`, `/exterior-shades/`, and `Exterior shades landing page consultation`; absent product values retain the existing motorized routing. Both pages use the same Beacon Ads conversion actions and the `google_landing_page` GHL tag.
 
-Uses Beacon Blinds' existing logo, photography, service areas, and orange accents. The phone number shown, (830) 364-4591, is Beacon's call-tracking number for this landing page only. It is deliberately different from the main site's (512) 930-1188; do not change it to match. The inline consultation form submits through the local `/api/consultation` route to Beacon’s existing `https://beaconblinds.com/api/contact/` endpoint. It includes server validation, a honeypot, and confirmed-success handling. The optional SMS consent checkbox was removed, so every submission sends `smsConsent: false`. Netlify hosting is configured in the repository-root `netlify.toml`; `netlify/functions/consultation.mjs` provides the same endpoint in production. Static-only hosting without that function cannot deliver submissions. The review rating and excerpt were taken from Beacon's homepage on September 21, 2026; recheck before launching advertising.
+Uses Beacon Blinds' existing logo, photography, service areas, and orange accents. The phone number shown, (830) 364-4591, is Beacon's call-tracking number for this landing page only. It is deliberately different from the main site's (512) 930-1188; do not change it to match. The inline consultation form submits through the local `/api/consultation` route, which creates the lead directly in Beacon's GoHighLevel location (see **GoHighLevel leads** below). It includes server validation, a honeypot, a per-visitor rate limit, and confirmed-success handling. The optional SMS consent checkbox was removed, so every submission sends `smsConsent: false`. Netlify hosting is configured in the repository-root `netlify.toml`; `netlify/functions/consultation.mjs` provides the same endpoint in production. Static-only hosting without that function cannot deliver submissions. The review rating and excerpt were taken from Beacon's homepage on September 21, 2026; recheck before launching advertising.
 
-Preview is marked noindex. Remove that directive only when the final page is approved for indexing. The only change made to beaconblinds.com for this page is that its contact endpoint accepts the `campaignTag` field this page sends (`cody-del/beacon-blinds-rebuild` PR #51).
+Preview is marked noindex. Remove that directive only when the final page is approved for indexing. Until October 2026 leads went through beaconblinds.com's contact endpoint, which accepts a `campaignTag` field for this page (`cody-del/beacon-blinds-rebuild` PR #51). This page no longer uses it.
+
+## GoHighLevel leads
+
+`consultation.mjs` sends each lead straight to GHL with the site's `GHL_PRIVATE_TOKEN` (a private integration in Beacon's sub-account with contact read and write access) and `GHL_LOCATION_ID` (`EcOn99KjgnFoU6yoY4FT`). Both are Netlify environment variables. Without them the form tells visitors to call. For each lead it:
+
+1. upserts the contact (name, email, phone, and source `Beacon Blinds Website - <form name>`, unchanged from when beaconblinds.com created these contacts);
+2. adds the tags `beacon-blinds`, `service-motorized-smart-home` or `service-solar-exterior-shades`, `sms-consent-no`, and `google_landing_page`. GHL's follow-up workflow triggers on `google_landing_page`. These leads deliberately do not get beaconblinds.com's `website-lead` tag. The tags are added in their own request so that a returning contact keeps its existing tags;
+3. adds a note with the service, request, SMS consent, source page, form, and campaign.
+
+The visitor sees success only after GHL returns a contact id and accepts the tags. A failed note is logged but not reported, because the lead is already in GHL.
 
 ## Google Ads tracking
 
@@ -22,7 +32,7 @@ Installed September 29, 2026. On September 30 the phone-call snippet was switche
 
 ## Verification
 
-`node --test consultation.test.mjs consultation-http.test.mjs tracking.test.mjs` checks validation, routing, consent, origin, and rejection handling with an injected mock transport. `tracking.test.mjs` pins the Google tag, both conversion labels, the call-tracking number, and that only Beacon's account appears on the page. Netlify runs the same tests before every deploy.
+`node --test consultation.test.mjs consultation-http.test.mjs tracking.test.mjs` checks validation, the GHL requests and tags, consent, origin, rate limiting, and rejection handling with an injected mock transport. `tracking.test.mjs` pins the Google tag, both conversion labels, the call-tracking number, and that only Beacon's account appears on the page. Netlify runs the same tests before every deploy.
 
 One live test lead was sent on September 29, 2026, before the Google tag was installed, so it recorded no conversion. It used the name "TEST LP Claude 2026-09-29", an `example.com` address, and a 555 phone number. Both this page's function and beaconblinds.com's endpoint returned success. Its arrival and `google_landing_page` tag in GoHighLevel have not been checked yet; delete the contact once they have.
 
