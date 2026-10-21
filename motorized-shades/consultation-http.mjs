@@ -1,7 +1,24 @@
 import {submitConsultation} from './consultation.mjs';
 
-export function createConsultationHandler(submit = submitConsultation) {
-  return async request => {
+// The limit beaconblinds.com/api/contact/ applied per visitor (5 per 10
+// minutes) while leads went through it. Kept in memory, so it resets when the
+// function instance is recycled, the same trade-off as the main site.
+export function createRateLimiter({windowMs = 10 * 60 * 1000, max = 5} = {}) {
+  const recent = new Map();
+  return (key, now = Date.now()) => {
+    if (recent.size > 1000) {
+      for (const [stale, times] of recent) if (now - times.at(-1) >= windowMs) recent.delete(stale);
+    }
+    const times = (recent.get(key) ?? []).filter(time => now - time < windowMs);
+    const limited = times.length >= max;
+    if (!limited) times.push(now);
+    recent.set(key, times);
+    return limited;
+  };
+}
+
+export function createConsultationHandler(submit = submitConsultation, rateLimited = createRateLimiter()) {
+  return async (request, context) => {
     const send = (status, body, headers = {}) => Response.json(body, {
       status, headers: {'Cache-Control': 'no-store', ...headers},
     });
@@ -29,7 +46,8 @@ export function createConsultationHandler(submit = submitConsultation) {
     } catch {
       return send(400, {error: 'Invalid request.'});
     }
-    const result = await submit(data);
+    const ip = context?.ip ?? request.headers.get('x-nf-client-connection-ip') ?? 'unknown';
+    const result = await submit(data, {rateLimited: () => rateLimited(ip)});
     return send(result.status, result.body);
   };
 }

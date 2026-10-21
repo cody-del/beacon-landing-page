@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {createConsultationHandler} from './consultation-http.mjs';
+import {createConsultationHandler, createRateLimiter} from './consultation-http.mjs';
 
 const origin = 'https://beaconblindsland.netlify.app';
 const request = (body = '{}', headers = {}) => new Request(`${origin}/api/consultation`, {
@@ -34,8 +34,32 @@ test('HTTP adapter preserves submission results and disables caching', async () 
   }
 });
 
-test('deployed function rejects an empty lead without calling Beacon', async () => {
+test('the rate limit is keyed by the visitor’s address', async () => {
+  const seen = [];
+  const handle = createConsultationHandler(
+    async (data, {rateLimited}) => ({status: rateLimited() ? 429 : 200, body: {}}),
+    ip => {seen.push(ip); return false;},
+  );
+  await handle(request(), {ip: '203.0.113.7'});
+  await handle(request('{}', {'x-nf-client-connection-ip': '198.51.100.2'}));
+  assert.deepEqual(seen, ['203.0.113.7', '198.51.100.2']);
+});
+
+test('rate limiter allows 5 leads per visitor per 10 minutes', () => {
+  const limited = createRateLimiter({windowMs: 1000, max: 2});
+  assert.equal(limited('a', 0), false);
+  assert.equal(limited('a', 1), false);
+  assert.equal(limited('a', 2), true);
+  assert.equal(limited('b', 2), false);
+  assert.equal(limited('a', 1001), false);
+  const defaults = createRateLimiter();
+  for (let i = 0; i < 5; i++) assert.equal(defaults('c', i), false);
+  assert.equal(defaults('c', 5), true);
+  assert.equal(defaults('c', 10 * 60 * 1000), false);
+});
+
+test('deployed function rejects an empty lead without calling GHL', async () => {
   const {default: handle, config} = await import('../netlify/functions/consultation.mjs');
   assert.equal(config.path, '/api/consultation');
-  assert.equal((await handle(request())).status, 400);
+  assert.equal((await handle(request(), {ip: '203.0.113.9'})).status, 400);
 });
