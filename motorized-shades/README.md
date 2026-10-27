@@ -30,6 +30,10 @@ The page reports to Beacon's Google Ads account, `AW-16673765845`. Lead-form con
 
 Installed September 29, 2026. On September 30 the phone-call snippet was switched to `AW-726943250/uOLuCP666IsdEJKM0doC`. That ID is the Naples Shutter account (its call actions use other labels), so from then on calls from this page counted in neither account, and Beacon's own call action recorded nothing. It was pointed back at Beacon's action on October 13, 2026. `tracking.test.mjs` fails if another account's ID returns. A conversion reaching Google Ads has not been observed yet.
 
+## GA4
+
+Both pages also send to beaconblinds.com's GA4 property, `G-L2T4RG7EZ1`, so paid traffic, engagement and leads show up there. The `gtag('config', 'G-L2T4RG7EZ1')` in each page's head runs only when the hostname is `go.beaconblinds.com`, so deploy previews, branch deploys and local copies send it nothing. An accepted lead also sends one `generate_lead` to GA4 only (`send_to`, `form_name`, `source_page`, the main site's parameters), before the enhanced-conversion `user_data` is set and from the same host only. A filled honeypot is refused by `/api/consultation`, so it sends nothing. `tracking.test.mjs` pins both.
+
 ## Verification
 
 `node --test consultation.test.mjs consultation-http.test.mjs tracking.test.mjs` checks validation, the GHL requests and tags, consent, origin, rate limiting, and rejection handling with an injected mock transport. `tracking.test.mjs` pins the Google tag, both conversion labels, the call-tracking number, and that only Beacon's account appears on the page. Netlify runs the same tests before every deploy.

@@ -13,6 +13,11 @@ let pending = false;
 // site's browser-side conversion never runs for them.
 const LEAD_CONVERSION = 'AW-16673765845/cNjoCN3wx8EcENXz1Y4-';
 
+// GA4, beaconblinds.com's property. The pages configure it on the production host
+// only, and the lead event below is held to the same host.
+const GA4_ID = 'G-L2T4RG7EZ1';
+const GA4_HOSTNAME = 'go.beaconblinds.com';
+
 // Enhanced conversions: the email is lowercased, trimmed and SHA-256 hashed in the
 // browser, so no raw address is sent. Email only — the privacy policy's 10DLC
 // passage says phone numbers are not shared with third parties, and the main site
@@ -29,6 +34,12 @@ async function hashedEmail(raw) {
 async function trackLeadConversion(email) {
   try {
     if (typeof window.gtag !== 'function') return;
+    // The main site's GA4 lead event (trackGenerateLead in beacon-blinds-rebuild), to GA4
+    // only (send_to), sent before user_data is set. No name, email or phone: these
+    // parameters are stored in Google Analytics.
+    if (window.location?.hostname === GA4_HOSTNAME) {
+      window.gtag('event', 'generate_lead', {send_to: GA4_ID, form_name: formName, source_page: window.location.pathname});
+    }
     try {
       const hash = await hashedEmail(email);
       if (hash) window.gtag('set', 'user_data', {sha256_email_address: hash});
