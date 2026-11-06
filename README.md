@@ -20,7 +20,7 @@ Open http://127.0.0.1:4318/.
 ## Validate
 
 ```sh
-node --test motorized-shades/consultation.test.mjs motorized-shades/consultation-http.test.mjs motorized-shades/tracking.test.mjs
+node --test motorized-shades/consultation.test.mjs motorized-shades/consultation-http.test.mjs motorized-shades/turnstile.test.mjs motorized-shades/tracking.test.mjs
 python3 motorized-shades/scripts/build-service-boundary.py
 ```
 
@@ -39,6 +39,15 @@ See [project notes](motorized-shades/README.md) for asset sources and implementa
 ## Netlify
 
 The `beaconblindsland` project is connected to `main` in this repository. Netlify runs the mock-based form tests before publishing and bundles the serverless consultation function. The function checks request origin, body size, content type, and contact details before forwarding a valid lead to Beacon’s existing contact endpoint. Each forwarded lead declares `campaignTag: "google_landing_page"`, which becomes the GoHighLevel tag on the contact — without it this traffic reaches the CRM as `direct`, because the main site reads attribution from a browser cookie that a server-to-server post cannot carry. This repository owns that name: `cody-del/beacon-blinds-rebuild` validates the shape (lowercase slug, 2-40 characters) and passes it through verbatim, so renaming the campaign is a change here alone. GoHighLevel matches tags literally, so the string written here is exactly what the CRM workflows must filter on. A live test lead sent on September 29, 2026 was accepted by both this function and Beacon's contact endpoint. Its arrival in GoHighLevel has not been confirmed yet.
+
+## Cloudflare Turnstile
+
+`motorized-shades/dist/form.js` adds an invisible Cloudflare Turnstile human check to the consultation form on both pages; visitors only see a checkbox if Cloudflare wants one. `motorized-shades/turnstile.mjs` checks the token in the Netlify function before anything reaches GoHighLevel, refuses the lead with a 403 when the token is missing or refused, and never passes the token on. If Cloudflare can't be reached (3-second timeout, HTTP error or a non-JSON answer), the lead goes through rather than being lost.
+
+- Widget: "Beacon Blinds lead forms" in the gbp@shadestrategy.com Cloudflare account (Managed mode, shared with beaconblinds.com).
+- Site key: `0x4AAAAAAF2pY6JkEWdgaHa3` (public, in `form.js`), used only on `go.beaconblinds.com`. Every other host, such as deploy previews and localhost, uses Cloudflare's always-pass test key `1x00000000000000000000AA` and needs no secret.
+- Secret: the Netlify variable `TURNSTILE_SECRET_KEY` on `beaconblindsland` (Production context, Functions scope, marked secret). Without it the check is off. Netlify functions read it at deploy time, so redeploy after setting it.
+- The local preview server (`server.mjs`) does not run the check.
 
 ## Tracking
 

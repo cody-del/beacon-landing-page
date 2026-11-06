@@ -7,6 +7,58 @@ const formName = form.elements.product?.value === 'exterior-shades'
   : 'Motorized shades landing page consultation';
 let pending = false;
 
+// Cloudflare Turnstile: an invisible human check on the form; consultation-http.mjs checks its
+// token. The widget is "Beacon Blinds lead forms" in the gbp@shadestrategy.com Cloudflare
+// account. Other hosts, such as Netlify previews and localhost, get Cloudflare's always-pass
+// test key. The server only checks once TURNSTILE_SECRET_KEY is set in Netlify.
+const TURNSTILE_LIVE_HOSTS = ['go.beaconblinds.com'];
+const TURNSTILE_SITE_KEY = TURNSTILE_LIVE_HOSTS.includes(window.location?.hostname) ? '0x4AAAAAAF2pY6JkEWdgaHa3' : '1x00000000000000000000AA';
+const human = humanCheck(form);
+
+function humanCheck(form) {
+  let widget;
+  let failed = false;
+  let needsTick = false;
+  try {
+    const container = document.createElement('div');
+    container.className = 'lead-form-turnstile';
+    form.querySelector('button[type="submit"]').before(container);
+    new Promise((resolve, reject) => {
+      window.onTurnstileLoad = resolve;
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+      script.async = true;
+      script.onerror = reject;
+      document.head.append(script);
+    }).then(() => {
+      widget = window.turnstile.render(container, {
+        sitekey: TURNSTILE_SITE_KEY, action: 'consultation', size: 'flexible', appearance: 'interaction-only',
+        'before-interactive-callback': () => { needsTick = true; },
+        'error-callback': () => { failed = true; },
+      });
+    }).catch(() => { failed = true; });
+  } catch {
+    failed = true;
+  }
+  return {
+    // The token; '' when the check couldn't run (the server then decides); null while the
+    // visitor still has to tick the box.
+    async token() {
+      for (let waited = 0; waited < 8000; waited += 200) {
+        if (failed) return '';
+        const token = widget !== undefined && window.turnstile.getResponse(widget);
+        if (token) return token;
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+      return needsTick ? null : '';
+    },
+    // Tokens work once, so every send attempt needs a fresh one.
+    reset() {
+      try { if (widget !== undefined) window.turnstile.reset(widget); } catch {}
+    },
+  };
+}
+
 // Google Ads conversion "SS - Submit Lead Form" — the same action beaconblinds.com
 // reports to (src/lib/gtag.ts in beacon-blinds-rebuild). This page cannot rely on
 // that one: leads from here reach beaconblinds.com server to server, so the main
@@ -93,9 +145,14 @@ form.addEventListener('submit', async event => {
   button.disabled = true;
   button.textContent = 'Sending your request…';
   form.setAttribute('aria-busy', 'true');
+  let attempted = false;
   try {
+    const token = await human.token();
+    if (token === null) throw new Error('Please tick the box to confirm you’re a person, then send again.');
     const payload = Object.fromEntries(new FormData(form));
     payload.smsConsent = false;
+    payload['cf-turnstile-response'] = token;
+    attempted = true;
     const response = await fetch('/api/consultation', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -116,6 +173,7 @@ form.addEventListener('submit', async event => {
       : error.message;
     errorBox.hidden = false;
   } finally {
+    if (attempted) human.reset();
     pending = false;
     button.disabled = false;
     button.textContent = 'Get My Free Consultation';
