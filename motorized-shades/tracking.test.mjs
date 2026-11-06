@@ -60,7 +60,7 @@ test('the lead form still reports to Beacon\'s Submit Lead Form action', () => {
 
 // Runs form.js against a stub page, submits once, and returns every gtag call. By default the
 // Turnstile script fails to load; pass a `turnstile` stub to have it load instead.
-async function submitForm({hostname, ok = true, body = {success: true}, turnstile, sent = [], scripts = []} = {}) {
+async function submitForm({hostname, ok = true, body = {success: true}, turnstile, sent = [], scripts = [], clock = {now: 0}, beforeSubmit = () => {}} = {}) {
   const values = {firstName: 'Jane', lastName: 'Doe', phone: '(830) 555-0100', email: 'jane@example.com', product: 'motorized-shades'};
   const node = () => ({hidden: true, textContent: '', disabled: false, setAttribute() {}, removeAttribute() {}, getAttribute: () => null, addEventListener() {}, focus() {}, before() {}});
   const elements = Object.fromEntries(Object.entries(values).map(([name, value]) => [name, {...node(), value, validity: {valid: true}}]));
@@ -83,8 +83,10 @@ async function submitForm({hostname, ok = true, body = {success: true}, turnstil
     AbortSignal: {timeout: () => undefined},
     // form.js's own waits (the 8-second wait for a Turnstile token) run instantly here.
     globalThis: {}, TextEncoder, Uint8Array, setTimeout: callback => setImmediate(callback),
+    Date: {now: () => clock.now},
   });
   await new Promise(resolve => setTimeout(resolve, 0));
+  beforeSubmit();
   await listeners.submit({preventDefault() {}});
   await new Promise(resolve => setTimeout(resolve, 0));
   return JSON.parse(JSON.stringify(calls));
@@ -104,6 +106,37 @@ test('Turnstile: the live key only on go.beaconblinds.com, the token sent and th
     assert.equal(rendered[0].appearance, 'interaction-only');
     assert.equal(sent[0]['cf-turnstile-response'], 'token-1');
     assert.equal(resets, 1);
+  }
+});
+
+// A stub widget that issues `token-N` and counts resets; each reset issues the next token.
+function staleWidget({expired = false} = {}) {
+  const state = {resets: 0, options: null, token: 'token-1', expired};
+  state.turnstile = {
+    render: (container, options) => { state.options = options; options.callback(state.token); return 'w1'; },
+    getResponse: () => state.token,
+    isExpired: () => state.expired,
+    reset: () => { state.resets++; state.expired = false; state.token = `token-${state.resets + 1}`; state.options.callback(state.token); },
+  };
+  return state;
+}
+
+test('Turnstile: an expired token is swapped for a fresh one before sending', async () => {
+  const widget = staleWidget({expired: true});
+  const sent = [];
+  await submitForm({hostname: 'go.beaconblinds.com', turnstile: widget.turnstile, sent});
+  assert.equal(widget.options['refresh-expired'], 'auto');
+  assert.equal(sent[0]['cf-turnstile-response'], 'token-2');
+  assert.equal(widget.resets, 2); // once before sending, once after
+});
+
+test('Turnstile: a token older than 270 s is swapped for a fresh one; a newer one is kept', async () => {
+  for (const [age, expected] of [[271000, 'token-2'], [200000, 'token-1']]) {
+    const widget = staleWidget();
+    const sent = [];
+    const clock = {now: 1000};
+    await submitForm({hostname: 'go.beaconblinds.com', turnstile: widget.turnstile, sent, clock, beforeSubmit: () => { clock.now += age; }});
+    assert.equal(sent[0]['cf-turnstile-response'], expected, `age ${age}`);
   }
 });
 

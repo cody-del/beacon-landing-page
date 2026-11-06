@@ -19,6 +19,9 @@ function humanCheck(form) {
   let widget;
   let failed = false;
   let needsTick = false;
+  // When the current token arrived. Cloudflare honours a token for 300 s; a visitor who leaves
+  // the tab open while filling the form can otherwise send a stale one ("timeout-or-duplicate").
+  let issuedAt = 0;
   try {
     const container = document.createElement('div');
     container.className = 'lead-form-turnstile';
@@ -33,6 +36,8 @@ function humanCheck(form) {
     }).then(() => {
       widget = window.turnstile.render(container, {
         sitekey: TURNSTILE_SITE_KEY, action: 'consultation', size: 'flexible', appearance: 'interaction-only',
+        'refresh-expired': 'auto',
+        callback: () => { issuedAt = Date.now(); },
         'before-interactive-callback': () => { needsTick = true; },
         'error-callback': () => { failed = true; },
       });
@@ -44,6 +49,13 @@ function humanCheck(form) {
     // The token; '' when the check couldn't run (the server then decides); null while the
     // visitor still has to tick the box.
     async token() {
+      try {
+        // A token that has expired, or is close to it, is swapped for a fresh one first.
+        if (widget !== undefined && !failed && (window.turnstile.isExpired?.(widget) || (issuedAt && Date.now() - issuedAt > 270000))) {
+          issuedAt = 0;
+          window.turnstile.reset(widget);
+        }
+      } catch {}
       for (let waited = 0; waited < 8000; waited += 200) {
         if (failed) return '';
         const token = widget !== undefined && window.turnstile.getResponse(widget);
@@ -54,7 +66,7 @@ function humanCheck(form) {
     },
     // Tokens work once, so every send attempt needs a fresh one.
     reset() {
-      try { if (widget !== undefined) window.turnstile.reset(widget); } catch {}
+      try { if (widget !== undefined) { issuedAt = 0; window.turnstile.reset(widget); } } catch {}
     },
   };
 }
