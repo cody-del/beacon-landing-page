@@ -36,3 +36,4 @@
 
 /* Keep the full hero introduction to three balanced lines on desktop. */
 @media(min-width:1024px){.paper-description{max-width:900px;text-wrap:balance}}
+.lead-form-turnstile{margin-top:18px;max-width:100%}.lead-form-turnstile:empty{display:none}
