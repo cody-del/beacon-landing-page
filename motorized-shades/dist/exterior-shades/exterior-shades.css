@@ -23,3 +23,8 @@
     object-position: 35% center;
   }
 }
+
+.product-exterior-shades .exterior-bottom-cta {
+  margin-top: 48px;
+  text-align: center;
+}
