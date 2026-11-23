@@ -24,33 +24,50 @@ function humanCheck(form) {
   // When the current token arrived. Cloudflare honours a token for 300 s; a visitor who leaves
   // the tab open while filling the form can otherwise send a stale one ("timeout-or-duplicate").
   let issuedAt = 0;
-  try {
-    const container = document.createElement('div');
-    container.className = 'lead-form-turnstile';
-    form.querySelector('button[type="submit"]').before(container);
-    new Promise((resolve, reject) => {
-      window.onTurnstileLoad = resolve;
-      const script = document.createElement('script');
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
-      script.async = true;
-      script.onerror = reject;
-      document.head.append(script);
-    }).then(() => {
-      widget = window.turnstile.render(container, {
-        sitekey: TURNSTILE_SITE_KEY, action: 'consultation', size: 'flexible', appearance: 'interaction-only',
-        'refresh-expired': 'auto',
-        callback: () => { issuedAt = Date.now(); },
-        'before-interactive-callback': () => { needsTick = true; },
-        'error-callback': () => { failed = true; },
-      });
-    }).catch(() => { failed = true; });
-  } catch {
-    failed = true;
+  let started = false;
+  let observer;
+  function start() {
+    if (started) return;
+    started = true;
+    observer?.disconnect();
+    try {
+      const container = document.createElement('div');
+      container.className = 'lead-form-turnstile';
+      form.querySelector('button[type="submit"]').before(container);
+      new Promise((resolve, reject) => {
+        window.onTurnstileLoad = resolve;
+        const script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+        script.async = true;
+        script.onerror = reject;
+        document.head.append(script);
+      }).then(() => {
+        widget = window.turnstile.render(container, {
+          sitekey: TURNSTILE_SITE_KEY, action: 'consultation', size: 'flexible', appearance: 'interaction-only',
+          'refresh-expired': 'auto',
+          callback: () => { issuedAt = Date.now(); },
+          'before-interactive-callback': () => { needsTick = true; },
+          'error-callback': () => { failed = true; },
+        });
+      }).catch(() => { failed = true; });
+    } catch {
+      failed = true;
+    }
   }
+  // Only the interior page opts in. Start before the form reaches the viewport,
+  // or immediately on focus/submission; server verification is unchanged.
+  if (form.dataset?.deferHumanCheck === 'true' && typeof IntersectionObserver !== 'undefined') {
+    observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) start();
+    }, {rootMargin: '200px'});
+    observer.observe(form);
+    form.addEventListener('focusin', start, {once: true});
+  } else start();
   return {
     // The token; '' when the check couldn't run (the server then decides); null while the
     // visitor still has to tick the box.
     async token() {
+      start();
       try {
         // A token that has expired, or is close to it, is swapped for a fresh one first.
         if (widget !== undefined && !failed && (window.turnstile.isExpired?.(widget) || (issuedAt && Date.now() - issuedAt > 270000))) {

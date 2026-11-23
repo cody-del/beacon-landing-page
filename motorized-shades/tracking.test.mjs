@@ -60,7 +60,7 @@ test('the lead form still reports to Beacon\'s Submit Lead Form action', () => {
 
 // Runs form.js against a stub page, submits once, and returns every gtag call. By default the
 // Turnstile script fails to load; pass a `turnstile` stub to have it load instead.
-async function submitForm({hostname, ok = true, body = {success: true}, turnstile, sent = [], scripts = [], clock = {now: 0}, beforeSubmit = () => {}, fullName} = {}) {
+async function submitForm({hostname, ok = true, body = {success: true}, turnstile, sent = [], scripts = [], clock = {now: 0}, beforeSubmit = () => {}, fullName, deferHumanCheck = false, observerAvailable = true} = {}) {
   const values = {firstName: 'Jane', lastName: 'Doe', phone: '(830) 555-0100', email: 'jane@example.com', product: 'motorized-shades'};
   if (fullName !== undefined) {
     delete values.firstName; delete values.lastName; values.fullName = fullName;
@@ -68,11 +68,17 @@ async function submitForm({hostname, ok = true, body = {success: true}, turnstil
   const node = () => ({hidden: true, textContent: '', disabled: false, setAttribute() {}, removeAttribute() {}, getAttribute: () => null, addEventListener() {}, focus() {}, before() {}});
   const elements = Object.fromEntries(Object.entries(values).map(([name, value]) => [name, {...node(), value, validity: {valid: true}}]));
   const listeners = {};
-  const form = {...node(), elements, querySelector: node, addEventListener: (name, callback) => { listeners[name] = callback; }, reset() {}};
+  const form = {...node(), elements, dataset: {deferHumanCheck: String(deferHumanCheck)}, querySelector: node, addEventListener: (name, callback) => { listeners[name] = callback; }, reset() {}};
   const calls = [];
   const window = {gtag: (...args) => calls.push(args), location: {hostname, pathname: '/'}};
+  let approach;
   vm.runInNewContext(formJs, {
     window,
+    IntersectionObserver: observerAvailable ? class {
+      constructor(callback) { approach = () => callback([{isIntersecting: true}]); }
+      observe() {}
+      disconnect() {}
+    } : undefined,
     document: {
       querySelector: selector => selector === '#consultation-form' ? form : node(),
       createElement: () => ({}),
@@ -89,11 +95,60 @@ async function submitForm({hostname, ok = true, body = {success: true}, turnstil
     Date: {now: () => clock.now},
   });
   await new Promise(resolve => setTimeout(resolve, 0));
-  beforeSubmit();
+  await beforeSubmit({approach: () => approach?.(), focus: () => listeners.focusin?.()});
   await listeners.submit({preventDefault() {}});
   await new Promise(resolve => setTimeout(resolve, 0));
   return JSON.parse(JSON.stringify(calls));
 }
+
+test('deferred interior verification waits until the form approaches, then loads only once', async () => {
+  const scripts = [], sent = [];
+  const widget = staleWidget();
+  await submitForm({hostname: 'go.beaconblinds.com', fullName: 'Jane Smith', deferHumanCheck: true,
+    turnstile: widget.turnstile, scripts, sent,
+    beforeSubmit({approach, focus}) {
+      assert.equal(scripts.length, 0);
+      approach(); focus(); approach();
+      assert.equal(scripts.length, 1);
+    }});
+  assert.equal(sent[0]['cf-turnstile-response'], 'token-1');
+});
+
+test('keyboard focus starts deferred verification before submission', async () => {
+  const scripts = [], sent = [];
+  const widget = staleWidget();
+  await submitForm({hostname: 'go.beaconblinds.com', fullName: 'Jane Smith', deferHumanCheck: true,
+    turnstile: widget.turnstile, scripts, sent,
+    beforeSubmit({focus}) { assert.equal(scripts.length, 0); focus(); assert.equal(scripts.length, 1); }});
+  assert.equal(sent[0]['cf-turnstile-response'], 'token-1');
+});
+
+test('direct submission starts deferred verification and waits for its token', async () => {
+  const scripts = [], sent = [];
+  const widget = staleWidget();
+  await submitForm({hostname: 'go.beaconblinds.com', fullName: 'Jane Smith', deferHumanCheck: true,
+    turnstile: widget.turnstile, scripts, sent,
+    beforeSubmit() { assert.equal(scripts.length, 0); }});
+  assert.equal(scripts.length, 1);
+  assert.equal(sent[0]['cf-turnstile-response'], 'token-1');
+});
+
+test('deferred verification does not submit or track a lead while an interactive check is pending', async () => {
+  const sent = [];
+  const turnstile = {render: (container, options) => { options['before-interactive-callback'](); return 'w1'; }, getResponse: () => '', reset() {}};
+  const calls = await submitForm({hostname: 'go.beaconblinds.com', fullName: 'Jane Smith', deferHumanCheck: true, turnstile, sent});
+  assert.deepEqual(calls, []);
+  assert.equal(sent.length, 0);
+});
+
+test('browsers without IntersectionObserver initialize verification immediately', async () => {
+  const scripts = [], sent = [];
+  const widget = staleWidget();
+  await submitForm({hostname: 'go.beaconblinds.com', fullName: 'Jane Smith', deferHumanCheck: true,
+    observerAvailable: false, turnstile: widget.turnstile, scripts, sent,
+    beforeSubmit() { assert.equal(scripts.length, 1); }});
+  assert.equal(sent[0]['cf-turnstile-response'], 'token-1');
+});
 
 test('Turnstile: the live key only on go.beaconblinds.com, the token sent and the widget reset', async () => {
   for (const [hostname, sitekey] of [['go.beaconblinds.com', '0x4AAAAAAF2pY6JkEWdgaHa3'], ...NOT_PRODUCTION.map(host => [host, '1x00000000000000000000AA'])]) {
