@@ -71,11 +71,13 @@
   }
   toggle.hidden = false;
   syncPlayback();
-  // The poster and fonts get the initial bandwidth. Video is an enhancement.
-  const start = () => {
+  // Let the initial hero frame paint before media loading/decoding starts.
+  // Two animation frames give the browser a paint opportunity without a timer
+  // or an interaction requirement. Explicit Play remains immediate.
+  const start = () => requestAnimationFrame(() => requestAnimationFrame(() => {
     ready = true;
     syncPlayback();
-  };
+  }));
   if (document.readyState === 'complete') start();
   else window.addEventListener('load', start, {once: true});
 })();
