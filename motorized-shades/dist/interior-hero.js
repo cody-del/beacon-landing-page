@@ -5,8 +5,12 @@
   if (!video || !toggle) return;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobileViewport = window.matchMedia('(max-width: 700px)');
   const connection = navigator.connection;
-  let wantsPlayback = !reducedMotion.matches && !connection?.saveData;
+  // Autoplay on every connection speed; preserve existing device preferences.
+  const canAutoplay = () => !reducedMotion.matches && !connection?.saveData;
+  let wantsPlayback = canAutoplay();
+  let userChoice = false;
   let ready = false;
   let inView = hero.getBoundingClientRect().bottom > 0;
 
@@ -21,7 +25,11 @@
       video.pause();
       return;
     }
-    if (!video.getAttribute('src')) video.src = video.dataset.src;
+    // Select once, avoiding a second download when the phone rotates.
+    if (!video.getAttribute('src')) {
+      video.src = mobileViewport.matches && video.dataset.mobileSrc
+        ? video.dataset.mobileSrc : video.dataset.src;
+    }
     video.muted = true;
     video.play().catch(error => {
       // A pause while loading is expected when the visitor scrolls away.
@@ -39,15 +47,21 @@
   });
   toggle.addEventListener('click', () => {
     ready = true;
+    userChoice = true;
     wantsPlayback = !wantsPlayback;
     syncPlayback();
   });
   function respectPreferences() {
-    wantsPlayback = !reducedMotion.matches && !connection?.saveData;
+    userChoice = false;
+    wantsPlayback = canAutoplay();
     syncPlayback();
   }
   reducedMotion.addEventListener('change', respectPreferences);
-  connection?.addEventListener('change', respectPreferences);
+  connection?.addEventListener('change', () => {
+    // Connection estimates must not undo an explicit pause or play choice.
+    if (!userChoice) wantsPlayback = canAutoplay();
+    syncPlayback();
+  });
   document.addEventListener('visibilitychange', syncPlayback);
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => {
@@ -58,10 +72,10 @@
   toggle.hidden = false;
   syncPlayback();
   // The poster and fonts get the initial bandwidth. Video is an enhancement.
-  const start = () => setTimeout(() => {
+  const start = () => {
     ready = true;
     syncPlayback();
-  }, 2500);
+  };
   if (document.readyState === 'complete') start();
   else window.addEventListener('load', start, {once: true});
 })();
