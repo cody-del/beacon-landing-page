@@ -60,8 +60,11 @@ test('the lead form still reports to Beacon\'s Submit Lead Form action', () => {
 
 // Runs form.js against a stub page, submits once, and returns every gtag call. By default the
 // Turnstile script fails to load; pass a `turnstile` stub to have it load instead.
-async function submitForm({hostname, ok = true, body = {success: true}, turnstile, sent = [], scripts = [], clock = {now: 0}, beforeSubmit = () => {}} = {}) {
+async function submitForm({hostname, ok = true, body = {success: true}, turnstile, sent = [], scripts = [], clock = {now: 0}, beforeSubmit = () => {}, fullName} = {}) {
   const values = {firstName: 'Jane', lastName: 'Doe', phone: '(830) 555-0100', email: 'jane@example.com', product: 'motorized-shades'};
+  if (fullName !== undefined) {
+    delete values.firstName; delete values.lastName; values.fullName = fullName;
+  }
   const node = () => ({hidden: true, textContent: '', disabled: false, setAttribute() {}, removeAttribute() {}, getAttribute: () => null, addEventListener() {}, focus() {}, before() {}});
   const elements = Object.fromEntries(Object.entries(values).map(([name, value]) => [name, {...node(), value, validity: {valid: true}}]));
   const listeners = {};
@@ -170,4 +173,28 @@ test('GA4 gets no lead event for a rejected (honeypot) submission or off the pro
     assert.deepEqual(calls.filter(([, name]) => name === 'generate_lead'), [], hostname);
     assert.equal(calls.filter(([, name]) => name === 'conversion').length, 1, hostname);
   }
+});
+
+// Single-field interior form still sends the established split-name API payload.
+test('full name: normalizes spaces and preserves compound names in the payload', async () => {
+  const sent = [];
+  const calls = await submitForm({hostname: 'go.beaconblinds.com', fullName: '  María   de la Cruz  ', sent});
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].firstName, 'María');
+  assert.equal(sent[0].lastName, 'de la Cruz');
+  assert.equal('fullName' in sent[0], false);
+  assert.equal(sent[0].smsConsent, false);
+  assert.equal(calls.filter(([, event]) => event === 'conversion').length, 1);
+});
+
+test('full name: incomplete or overlong names do not submit or count conversions', async () => {
+  for (const fullName of ['', '   ', 'Jane', 'a'.repeat(101) + ' Smith', 'Jane ' + 'a'.repeat(101)]) {
+    const sent = [];
+    assert.deepEqual(await submitForm({hostname: 'go.beaconblinds.com', fullName, sent}), []);
+    assert.equal(sent.length, 0);
+  }
+});
+
+test('full name: rejected submissions do not count conversions', async () => {
+  assert.deepEqual(await submitForm({hostname: 'go.beaconblinds.com', fullName: 'Jane Smith', ok: false, body: {success:false, error:'Unable to submit this request.'}}), []);
 });
