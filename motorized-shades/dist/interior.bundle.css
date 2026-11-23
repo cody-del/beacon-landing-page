@@ -1164,4 +1164,7 @@
  .product-interior-shades .paper-ratings{align-items:center}
 }
 
-.product-interior-shades .interior-reviews-heading{margin:0 0 20px;text-align:center;color:#303638;font:600 22px/1.35 Inter,sans-serif}
+.product-interior-shades .interior-reviews-heading{display:none;margin:0 0 20px;text-align:center;color:#303638;font:600 22px/1.35 Inter,sans-serif}
+.product-interior-shades .reviews-count-accent{color:#a65b06}
+.product-interior-shades .reviews-summary-caption{font-size:13px;font-weight:600;color:#303638}
+@media(max-width:760px){.product-interior-shades .interior-reviews-heading{display:block}}
