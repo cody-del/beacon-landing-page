@@ -44,5 +44,15 @@
   "duplicate_copies_omitted": [
     "20260923_114653~3(1).mp4",
     "20260923_153250~4(1).mp4"
-  ]
+  ],
+  "mobile_variant": {
+    "output": "assets/beacon-shades-hero-mobile.mp4",
+    "source": "assets/beacon-shades-hero.mp4",
+    "size": "854x480",
+    "duration": "unchanged; full montage",
+    "audio": "none",
+    "encoding": "libx264, preset slow, CRF 28, maxrate 600k, bufsize 1200k, yuv420p, faststart, metadata removed",
+    "bytes": 900835,
+    "scope": "interior page only, viewport <=700px at first playback"
+  }
 }
