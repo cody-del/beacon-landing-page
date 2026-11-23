@@ -5,6 +5,8 @@
 @font-face{font-family:Inter;font-style:normal;font-weight:700;font-display:swap;src:url('assets/interior-inter-700.woff2') format('woff2')}
 @font-face{font-family:Poppins;font-style:normal;font-weight:800;font-display:swap;src:url('assets/interior-poppins-800.woff2') format('woff2')}
 .product-interior-shades .paper-hero{min-height:760px;background-image:url('assets/interior-hero-poster.webp')}
+/* Paint the existing poster immediately; playback replaces it without a late reveal. */
+.product-interior-shades .hero-video{opacity:1}
 .product-interior-shades .paper-hero::before{background:linear-gradient(rgb(12 15 17 / .58),rgb(12 15 17 / .64) 55%,rgb(12 15 17 / .82))}
 .product-interior-shades .paper-hero-content{padding-top:68px;padding-bottom:64px;gap:24px}
 .product-interior-shades .interior-location{color:#ffd39b;font-size:14px;line-height:1.5;font-weight:600;letter-spacing:.06em}
@@ -12,6 +14,8 @@
 .product-interior-shades .paper-benefits{flex-wrap:wrap;gap:14px 28px}
 .product-interior-shades .paper-button-outline{color:#fff;border-color:#ffbf70;background:#1116}
 .product-interior-shades .hardwood-section{padding-block:76px}
+.product-interior-shades .hardwood-service-area{background:#fff}
+.product-interior-shades .hardwood-gallery{background:#f5f5f5}
 .product-interior-shades .hardwood-consultation{background-image:linear-gradient(100deg,#252520ed,#292925e8),url('assets/beacon-project-high-rise-closed-shades.webp')}
 .product-interior-shades .hardwood-consultation-grid{gap:48px}
 .product-interior-shades .interior-project-note{font-size:14px;line-height:1.6;color:#eee;max-width:460px;margin:0 0 24px}
