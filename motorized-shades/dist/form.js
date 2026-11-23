@@ -1,5 +1,6 @@
 const form = document.querySelector('#consultation-form');
 const button = form.querySelector('button[type="submit"]');
+const submitLabel = button.textContent;
 const errorBox = document.querySelector('#form-error');
 // Only the interior page opts into a single visible name field.
 const usesFullName = Boolean(form.elements.fullName);
@@ -222,7 +223,7 @@ form.addEventListener('submit', async event => {
     if (attempted) human.reset();
     pending = false;
     button.disabled = false;
-    button.textContent = 'Get My Free Consultation';
+    button.textContent = submitLabel;
     form.removeAttribute('aria-busy');
   }
 });
