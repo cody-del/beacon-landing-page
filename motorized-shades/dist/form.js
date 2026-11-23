@@ -1,7 +1,9 @@
 const form = document.querySelector('#consultation-form');
 const button = form.querySelector('button[type="submit"]');
 const errorBox = document.querySelector('#form-error');
-const fields = ['firstName', 'lastName', 'phone', 'email'];
+// Only the interior page opts into a single visible name field.
+const usesFullName = Boolean(form.elements.fullName);
+const fields = usesFullName ? ['fullName', 'phone', 'email'] : ['firstName', 'lastName', 'phone', 'email'];
 const formName = form.elements.product?.value === 'exterior-shades'
   ? 'Exterior shades landing page consultation'
   : 'Motorized shades landing page consultation';
@@ -116,10 +118,20 @@ async function trackLeadConversion(email) {
   }
 }
 
+function splitFullName(value) {
+  const [firstName = '', ...rest] = value.trim().split(/\s+/u);
+  return {firstName, lastName: rest.join(' ')};
+}
+
 function fieldError(name) {
   const field = form.elements[name];
   const value = field.value.trim();
-  if (!value) return `Please enter your ${name === 'firstName' ? 'first name' : name === 'lastName' ? 'last name' : name === 'phone' ? 'phone number' : 'email address'}.`;
+  if (!value) return `Please enter your ${name === 'fullName' ? 'full name' : name === 'firstName' ? 'first name' : name === 'lastName' ? 'last name' : name === 'phone' ? 'phone number' : 'email address'}.`;
+  if (name === 'fullName') {
+    const {firstName, lastName} = splitFullName(value);
+    if (!lastName) return 'Please enter your first and last name.';
+    if (firstName.length > 100 || lastName.length > 100) return 'Please keep each part of your name under 101 characters.';
+  }
   if (name === 'email' && !field.validity.valid) return 'Please enter a valid email address.';
   if (name === 'phone') {
     const digits = value.replace(/\D/g, '');
@@ -162,6 +174,11 @@ form.addEventListener('submit', async event => {
     const token = await human.token();
     if (token === null) throw new Error('Please tick the box to confirm you’re a person, then send again.');
     const payload = Object.fromEntries(new FormData(form));
+    // Keep the established API/CRM payload, including compound family names.
+    if (usesFullName) {
+      Object.assign(payload, splitFullName(payload.fullName));
+      delete payload.fullName;
+    }
     payload.smsConsent = false;
     payload['cf-turnstile-response'] = token;
     attempted = true;
