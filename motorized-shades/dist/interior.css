@@ -29,6 +29,9 @@
 .product-interior-shades .shade-carousel-dot{width:28px;height:28px;background:radial-gradient(circle,#777 4px,transparent 5px)}
 .product-interior-shades .shade-carousel-dot[aria-current="true"]{width:28px;background:radial-gradient(circle,#92540f 6px,transparent 7px)}
 .product-interior-shades .shade-carousel-dots{gap:4px}
+.product-interior-shades .shade-carousel{--gallery-height:clamp(360px,46vw,570px);--gallery-arrow-size:54px}
+.product-interior-shades .shade-carousel-track{height:var(--gallery-height)}
+.product-interior-shades .shade-carousel-arrow{top:calc((var(--gallery-height) - var(--gallery-arrow-size))/2)}
 .product-interior-shades .interior-final-cta{text-align:center;background:#262623;color:#fff}
 .product-interior-shades .interior-final-cta .hardwood-body{color:#eee;margin:20px 0 28px}
 .product-interior-shades :focus-visible{outline:3px solid #a45600;outline-offset:4px}
@@ -65,7 +68,7 @@
  .product-interior-shades .hardwood-form{padding:24px 18px}
  .product-interior-shades .hardwood-form-reassurance,.product-interior-shades .hardwood-google-badge{display:none}
  .product-interior-shades .hardwood-gallery-heading h2{max-width:20ch;margin-inline:auto}
- .product-interior-shades .shade-carousel-track{height:320px}
+ .product-interior-shades .shade-carousel{--gallery-height:320px;--gallery-arrow-size:46px}
  .product-interior-shades .footer{padding-bottom:110px}
  .interior-mobile-contact:not([hidden]){display:flex;position:fixed;z-index:20;bottom:0;left:0;right:0;gap:10px;align-items:center;justify-content:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid #ddd;background:#fff;box-shadow:0 -4px 20px #0001;font-family:Inter,sans-serif}
  .interior-mobile-contact>a{font-size:12px;font-weight:700;text-align:center;text-decoration:none;flex:1;padding:14px 6px;min-height:46px;color:#211b12}
@@ -100,4 +103,8 @@
  .product-interior-shades .hardwood-form-heading h2{font-size:22px}
  .product-interior-shades .interior-consultation-copy h2{font-size:24px}
  .product-interior-shades .hardwood-value-card{padding:0}
+ .product-interior-shades #process-heading{text-align:left}
+}
+@media(max-width:350px){
+ .product-interior-shades .paper-ratings{align-items:center}
 }
