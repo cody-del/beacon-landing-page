@@ -89,3 +89,9 @@ Phones at 700px wide or less select `beacon-shades-hero-mobile.mp4` when playbac
 Autoplay starts after the initial window load, without the previous additional 2.5-second timer, when the hero is visible. Slow connection estimates do not disable autoplay. Existing reduced-motion and explicit data-saving preferences still use the poster until Play is chosen. User pause choices persist across connection changes. Offscreen and hidden-tab playback still pauses. The mobile changes affect the interior script only, and the exterior page retains its existing media and behavior.
 
 `interior-hero.test.mjs` checks source selection, autoplay on slow connections, view/tab visibility, manual pause, and motion/data preferences. It runs alongside the existing consultation and tracking tests in the Netlify build.
+
+### Interior first-paint loading
+
+The interior build embeds the existing generated stylesheet in `index.html` so the first paint does not wait for a separate CSS request. Edit the source CSS files and run `node motorized-shades/build-interior.mjs`; the generated style block is replaced idempotently. The external bundle is still generated, and the exterior page keeps its existing stylesheet links. The tradeoff is larger HTML and no separate CSS cache reuse for the interior page; compressed total styling bytes remain comparable.
+
+The interior form opts into `data-defer-human-check="true"`. Its existing Turnstile widget starts when the form is within 200px of the viewport, on keyboard focus, or on submission, whichever happens first. Submission waits for the existing token logic. Token validation, expiration, server enforcement, timeout/error handling, and confirmed-success conversion events remain unchanged. Browsers without IntersectionObserver and the exterior page initialize verification immediately. Google Ads and GA4 loading are unchanged, and video still autoplays.
