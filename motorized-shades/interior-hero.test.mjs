@@ -27,17 +27,32 @@ function setup({mobile = true, reducedMotion = false, connection = {}, visible =
   const document = {hidden: false, readyState: 'loading', querySelector: () => hero,
     addEventListener: (e, fn) => on('document', e, fn)};
   let intersection;
+  const frames = [];
   const context = {document, navigator: {connection: network},
     window: {matchMedia: query => query.includes('prefers') ? motion : viewport,
       addEventListener: (e, fn) => on('window', e, fn)},
+    requestAnimationFrame: fn => frames.push(fn),
     IntersectionObserver: class { constructor(fn) { intersection = fn; } observe() {} },
   };
   context.window.IntersectionObserver = context.IntersectionObserver;
   vm.runInNewContext(script, context);
   return {video, button, motion, network, document, viewport,
-    start: () => listeners.get('window:load')(), event: (target, event) => listeners.get(`${target}:${event}`)(),
+    load: () => listeners.get('window:load')(), frame: () => frames.shift()?.(),
+    start: () => { listeners.get('window:load')(); frames.shift()?.(); frames.shift()?.(); },
+    event: (target, event) => listeners.get(`${target}:${event}`)(),
     visible: value => intersection([{isIntersecting: value}])};
 }
+
+test('automatic media loading gives the initial hero a paint opportunity', () => {
+  const h = setup();
+  h.load();
+  assert.equal(h.video.src, undefined);
+  h.frame();
+  assert.equal(h.video.src, undefined);
+  h.frame();
+  assert.equal(h.video.src, 'mobile.mp4');
+  assert.equal(h.video.paused, false);
+});
 
 test('mobile starts the smaller video automatically after initial loading, even on 3G', () => {
   const h = setup({connection: {effectiveType: '3g', downlink: 0.5}});
