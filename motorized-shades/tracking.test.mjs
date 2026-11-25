@@ -253,3 +253,12 @@ test('full name: incomplete or overlong names do not submit or count conversions
 test('full name: rejected submissions do not count conversions', async () => {
   assert.deepEqual(await submitForm({hostname: 'go.beaconblinds.com', fullName: 'Jane Smith', ok: false, body: {success:false, error:'Unable to submit this request.'}}), []);
 });
+
+test('the lead conversion carries the GHL contact id as transaction_id', async () => {
+  const withId = await submitForm({hostname: 'go.beaconblinds.com', body: {success: true, contactId: 'abc123'}});
+  const conversion = withId.find(([, name]) => name === 'conversion');
+  assert.equal(conversion[2].transaction_id, 'lead_abc123');
+  // An older function without the id still reports the lead, just without the id.
+  const withoutId = await submitForm({hostname: 'go.beaconblinds.com'});
+  assert.equal(withoutId.find(([, name]) => name === 'conversion')[2].transaction_id, undefined);
+});
