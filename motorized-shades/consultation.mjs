@@ -35,7 +35,10 @@ export const PRODUCTS = {
 export async function submitConsultation(data, {fetcher = fetch, rateLimited = () => false, env = process.env} = {}) {
   const fail = (status, error) => ({status, body: {success: false, error}});
   if (!data || typeof data !== 'object' || Array.isArray(data)) return fail(400, 'Please check your contact details.');
-  if (data.companyWebsite) return fail(400, `Unable to submit this request. Please call ${PHONE}.`);
+  // Honeypot. Named "website": Chrome autofills fields whose name contains "company",
+  // which silently dropped real leads. companyWebsite is still refused for pages
+  // cached before the rename.
+  if (data.website || data.companyWebsite) return fail(400, `Unable to submit this request. Please call ${PHONE}.`);
   const product = data.product ?? 'motorized-shades';
   if (!Object.hasOwn(PRODUCTS, product)) return fail(400, 'Please refresh the page and try again.');
   const lead = PRODUCTS[product];
@@ -63,6 +66,7 @@ export async function submitConsultation(data, {fetcher = fetch, rateLimited = (
   const post = (path, body) => fetcher(`${GHL_BASE_URL}${path}`, {method: 'POST', headers, body: JSON.stringify(body), signal});
 
   let contactPath;
+  let leadId;
   try {
     const upsert = await post('/contacts/upsert', {
       locationId,
@@ -81,6 +85,7 @@ export async function submitConsultation(data, {fetcher = fetch, rateLimited = (
       console.error(`[consultation] GHL did not confirm the lead (HTTP ${upsert.status})`);
       return fail(502, `We couldn’t confirm your request. Please call ${PHONE} for help.`);
     }
+    leadId = contactId;
     contactPath = `/contacts/${encodeURIComponent(contactId)}`;
     // Added on their own rather than in the upsert, so a returning contact
     // keeps the tags it already has. The workflow starts from this call, so a
@@ -115,5 +120,7 @@ export async function submitConsultation(data, {fetcher = fetch, rateLimited = (
   } catch (error) {
     console.error(`[consultation] GHL lead note failed: ${error.name}`);
   }
-  return {status: 200, body: {success: true}};
+  // The contact id goes back to the page as the Ads conversion's transaction_id, so
+  // Google drops a duplicate if the conversion ever fires twice for one lead.
+  return {status: 200, body: {success: true, contactId: leadId}};
 }

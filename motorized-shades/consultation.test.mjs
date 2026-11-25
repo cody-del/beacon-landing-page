@@ -21,7 +21,7 @@ function fakeGhl({upsert = reply(201, {new: true, contact: {id: 'contact-1'}}), 
 }
 
 test('incomplete and spam requests never reach GHL', async () => {
-  for (const data of [null, [], {}, {...valid, phone:'123'}, {...valid, companyWebsite:'spam'}, {...valid, email:'invalid'}, {...valid, product:'unknown'}, {...valid, product:'toString'}]) {
+  for (const data of [null, [], {}, {...valid, phone:'123'}, {...valid, website:'spam'}, {...valid, companyWebsite:'spam'}, {...valid, email:'invalid'}, {...valid, product:'unknown'}, {...valid, product:'toString'}]) {
     const result = await submitConsultation(data, {env, fetcher: mustNotCall, rateLimited: mustNotCall});
     assert.equal(result.status, 400);
     assert.equal(result.body.success, false);
@@ -31,7 +31,7 @@ test('incomplete and spam requests never reach GHL', async () => {
 test('creates the motorized lead in GHL tagged google_landing_page and never website-lead', async () => {
   const ghl = fakeGhl();
   const result = await submitConsultation({...valid, firstName:' Test ', email:' Test@Example.com '}, {env, fetcher: ghl.fetcher});
-  assert.deepEqual(result, {status: 200, body: {success: true}});
+  assert.deepEqual(result, {status: 200, body: {success: true, contactId: 'contact-1'}});
   assert.deepEqual(ghl.calls.map(call => call.url), [
     `${GHL_BASE_URL}/contacts/upsert`, `${GHL_BASE_URL}/contacts/contact-1/tags`, `${GHL_BASE_URL}/contacts/contact-1/notes`,
   ]);
@@ -122,7 +122,7 @@ test('a lead that is in GHL with its tags succeeds even if the note fails', asyn
   const logged = t.mock.method(console, 'error', () => {});
   for (const notes of [reply(500, {}), async () => {throw new TypeError('fetch failed');}]) {
     const result = await submitConsultation(valid, {env, fetcher: fakeGhl({notes}).fetcher});
-    assert.deepEqual(result, {status: 200, body: {success: true}});
+    assert.deepEqual(result, {status: 200, body: {success: true, contactId: 'contact-1'}});
   }
   assert.equal(logged.mock.callCount(), 2);
 });

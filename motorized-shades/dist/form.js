@@ -115,7 +115,7 @@ async function hashedEmail(raw) {
 
 // Best effort: the lead has already reached the CRM, so tracking must never throw or
 // hold up the confirmation. A missing gtag (blocked, not yet loaded) skips it.
-async function trackLeadConversion(email) {
+async function trackLeadConversion(email, contactId) {
   try {
     if (typeof window.gtag !== 'function') return;
     // The main site's GA4 lead event (trackGenerateLead in beacon-blinds-rebuild), to GA4
@@ -130,7 +130,11 @@ async function trackLeadConversion(email) {
     } catch {
       // Send the conversion without user data rather than not at all.
     }
-    window.gtag('event', 'conversion', {send_to: LEAD_CONVERSION, form_name: formName});
+    // transaction_id = the GHL contact id, so Google drops a duplicate if this ever
+    // fires twice for the same lead.
+    const conversion = {send_to: LEAD_CONVERSION, form_name: formName};
+    if (typeof contactId === 'string' && contactId) conversion.transaction_id = `lead_${contactId}`;
+    window.gtag('event', 'conversion', conversion);
   } catch {
     // Tracking must never surface an error to the visitor.
   }
@@ -208,7 +212,7 @@ form.addEventListener('submit', async event => {
     });
     const result = await response.json();
     if (!response.ok || result.success !== true) throw new Error(result.error || 'We couldn’t confirm your request. Please call (830) 364-4591 for help.');
-    trackLeadConversion(payload.email);
+    trackLeadConversion(payload.email, result.contactId);
     form.hidden = true;
     form.reset();
     const success = document.querySelector('#consultation-success');
